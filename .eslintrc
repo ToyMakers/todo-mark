@@ -1,11 +1,11 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["prettier", "@typescript-eslint"],
   "extends": [
-    "plugin:@typescript-eslint/recommended",
     "airbnb",
     "airbnb/hooks",
     "airbnb-typescript",
+    "plugin:prettier/recommended",
   ],
   "parserOptions": {
     "project": [
@@ -16,14 +16,12 @@
     ],
   },
   "rules": {
-    "react/react-in-jsx-scope": "off",
-    "react/jsx-props-no-spreading": "off",
-    "import/prefer-default-export": "off",
+    "react/react-in-jsx-scope": 0,
     "import/extensions": 0,
-    // 테스트 또는 개발환경을 구성하는 파일에서는 devDependency 사용을 허용
+    // 테스트 또는 개발환경을 구성하는 파일에서는 devDependency 사용 허용
     "import/no-extraneous-dependencies": 0,
-    "react/button-has-type": 1,
-    // 중복 선언 경고
+    // 이름 중복 선언 경고
     "@typescript-eslint/no-shadow": "warn",
+    "react/jsx-filename-extension": 0,
   },
 }
