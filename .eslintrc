@@ -20,8 +20,8 @@
     "import/extensions": 0,
     // 테스트 또는 개발환경을 구성하는 파일에서는 devDependency 사용 허용
     "import/no-extraneous-dependencies": 0,
-    // 이름 중복 선언 경고
-    "@typescript-eslint/no-shadow": "warn",
+    "@typescript-eslint/no-shadow": "off",
+    "react/button-has-type": 1,
     "react/jsx-filename-extension": 0,
   },
 }
