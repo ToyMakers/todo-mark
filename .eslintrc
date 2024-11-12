@@ -18,9 +18,8 @@
   "rules": {
     "react/react-in-jsx-scope": 0,
     "import/extensions": 0,
-    // 테스트 또는 개발환경을 구성하는 파일에서는 devDependency 사용 허용
     "import/no-extraneous-dependencies": 0,
-    "@typescript-eslint/no-shadow": "off",
+    "@typescript-eslint/no-shadow": "warn",
     "react/button-has-type": 1,
     "react/jsx-filename-extension": 0,
   },
