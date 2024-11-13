@@ -1,0 +1,28 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["prettier", "@typescript-eslint"],
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "airbnb-typescript",
+    "plugin:prettier/recommended"
+  ],
+  "parserOptions": {
+    "project": [
+      "./tsconfig.json",
+      "./tsconfig.app.json",
+      "./tsconfig.node.json",
+      "vite.config.ts"
+    ]
+  },
+  "rules": {
+    "react/react-in-jsx-scope": 0,
+    "import/extensions": 0,
+    "import/no-extraneous-dependencies": [
+      "error",
+      { "devDependencies": ["vite.config.ts"] }
+    ],
+    "@typescript-eslint/no-shadow": "error",
+    "react/button-has-type": 1
+  }
+}
