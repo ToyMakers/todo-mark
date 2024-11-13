@@ -20,7 +20,6 @@
     "import/extensions": 0,
     "import/no-extraneous-dependencies": 0,
     "@typescript-eslint/no-shadow": "error",
-    "react/button-has-type": 1,
-    "react/jsx-filename-extension": 0
+    "react/button-has-type": 1
   }
 }
