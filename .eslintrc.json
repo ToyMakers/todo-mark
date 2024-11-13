@@ -18,7 +18,10 @@
   "rules": {
     "react/react-in-jsx-scope": 0,
     "import/extensions": 0,
-    "import/no-extraneous-dependencies": 0,
+    "import/no-extraneous-dependencies": [
+      "error",
+      { "devDependencies": ["vite.config.ts"] }
+    ],
     "@typescript-eslint/no-shadow": "error",
     "react/button-has-type": 1
   }
