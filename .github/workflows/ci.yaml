@@ -1,4 +1,4 @@
-name: build
+name: ci
 
 on:
   push:
@@ -25,6 +25,9 @@ jobs:
 
       - name: dependencies 설치
         run: pnpm install
+
+      - name: Lint
+        run: pnpm lint
 
       - name: Build
         run: pnpm build
