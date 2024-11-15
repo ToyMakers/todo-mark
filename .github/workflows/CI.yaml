@@ -7,21 +7,28 @@ on:
       - master
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: [20]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
         with:
-          node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: 'pnpm-lock.yaml'
+          version: 9
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
-      - name: install pnpm
-        run: npm install -g pnpm
-
-      - name: install
+      - name: dependencies 설치
         run: pnpm install
-      - name: Lint
-        run: pnpm run lint
+
+      - name: Lint 적용
+        run: pnpm lint
+
+      - name: build
+        run: pnpm build
