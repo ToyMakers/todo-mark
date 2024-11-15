@@ -26,28 +26,9 @@ jobs:
       - name: dependencies 설치
         run: pnpm install
 
-      - name: Lint 적용
+      - name: lint
         run: pnpm lint
 
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20]
-    needs: lint
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-          cache-dependency-path: 'pnpm-lock.yaml'
-
-      - name: dependencies 설치
-        run: pnpm install
-
-      - name: build
+      - name: Build
+        if: success()
         run: pnpm build
