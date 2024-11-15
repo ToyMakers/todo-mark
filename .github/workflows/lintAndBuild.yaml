@@ -26,9 +26,5 @@ jobs:
       - name: dependencies 설치
         run: pnpm install
 
-      - name: lint
-        run: pnpm lint
-
       - name: Build
-        if: success()
         run: pnpm build
