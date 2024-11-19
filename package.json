@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "husky && echo 'pnpm lint' > .husky/pre-commit"
+    "prepare": "husky"
   },
   "dependencies": {
     "react": "^18.3.1",
