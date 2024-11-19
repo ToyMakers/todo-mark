@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "todomark",
+  "version": "1.0.1",
+  "description": "마크다운 투두리스트",
+  "default_locale": "ko",
+  "action": {
+    "default_title": "투두막",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "storage" // IndexedDB 사용 시 필요
+  ],
+  "background": {
+    "service_worker": "background.ts"
+  }
+}
