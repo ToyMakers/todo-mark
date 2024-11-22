@@ -1,6 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["prettier", "@typescript-eslint", "tailwindcss"],
+  "plugins": ["prettier", "@typescript-eslint", "tailwindcss", "react-refresh"],
   "extends": [
     "airbnb",
     "airbnb/hooks",
