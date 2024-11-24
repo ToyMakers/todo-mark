@@ -80,6 +80,9 @@ importers:
       postcss-import:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.49)
+      husky:
+        specifier: ^9.1.6
+        version: 9.1.6
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -2113,6 +2116,11 @@ packages:
         integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==,
       }
     engines: { node: '>= 0.4' }
+
+  husky@9.1.6:
+    resolution: {integrity: sha512-sqbjZKK7kf44hfdE94EoX8MZNk0n7HeW37O4YrVGCF4wzgQjp+akPAkfUK5LZ6KuR/6sqeAVuXHji+RzQgOn5A==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   ignore@5.3.2:
     resolution:
@@ -4920,6 +4928,8 @@ snapshots:
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
+
+  husky@9.1.6: {}
 
   ignore@5.3.2: {}
 
