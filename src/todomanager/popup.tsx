@@ -31,6 +31,22 @@ function Popup() {
     }
   };
 
+  const completeTodo = (id: number) => {
+    setTodos(
+      todos.map(todo => {
+        if (todo.id === id) {
+          return { ...todo, done: !todo.done };
+        }
+        return todo;
+      }),
+    );
+    todos.forEach(todo => {
+      if (todo.id === id && !todo.done) {
+        Alert(`${todo.content} 완료!`);
+      }
+    });
+  };
+
   return (
     <div>
       <div className="w-32 h-10">
@@ -41,7 +57,11 @@ function Popup() {
           {todos.map(todo => (
             <div key={todo.id} className="flex">
               <div>{todo.content}</div>
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={todo.done}
+                onChange={() => completeTodo(todo.id)}
+              />
             </div>
           ))}
         </div>
