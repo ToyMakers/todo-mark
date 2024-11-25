@@ -61,5 +61,5 @@
       "skipClassAttribute": false //class 속성을 검사에서 제외할지 여부를 설정, 현재 모든 class 속성이 검사 대상
     }
   },
-  "ignorePatterns": ["dist"]
+  "ignorePatterns": ["dist", "postcss.config.cjs"]
 }
