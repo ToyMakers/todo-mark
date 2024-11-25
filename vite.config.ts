@@ -8,10 +8,12 @@ export default defineConfig({
     rollupOptions: {
       input: {
         background: 'src/background.ts',
+        main: 'src/main.tsx',
       },
       output: {
-        entryFileNames: 'background.js',
+        entryFileNames: '[name].js',
       },
     },
+    outDir: 'dist',
   },
 });
