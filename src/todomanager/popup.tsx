@@ -31,11 +31,6 @@ function Popup() {
         return todo;
       }),
     );
-    todos.forEach(todo => {
-      if (todo.id === id && !todo.isComplete) {
-        alert(`${todo.content} 완료!`);
-      }
-    });
   };
 
   return (
