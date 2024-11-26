@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 interface Todo {
   id: string;
   content: string;
+  dueDate?: Date;
   isComplete: boolean;
 }
 
@@ -16,7 +17,12 @@ function Popup() {
     if (typeof newTodo === 'string' && newTodo.length > 0) {
       setTodos([
         ...todos,
-        { id: uuidv4(), content: newTodo, isComplete: false },
+        {
+          id: uuidv4(),
+          content: newTodo,
+          dueDate: undefined,
+          isComplete: false,
+        },
       ]);
       setNewTodo('');
     }
