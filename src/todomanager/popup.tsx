@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 function Popup() {
   // TODO : 데이터를 indexedDB에 저장하고 관리할 수 있도록 작업 예정
   const [todos, setTodos] = useState([
     {
-      id: 0,
+      id: uuidv4(),
       content: '할 일 1',
       dueDate: new Date().toISOString().split('T')[0],
       isComplete: false,
@@ -18,7 +19,7 @@ function Popup() {
       setTodos([
         ...todos,
         {
-          id: todos.length,
+          id: uuidv4(),
           content: newTodo,
           dueDate: new Date().toISOString().split('T')[0],
           isComplete: false,
@@ -30,7 +31,7 @@ function Popup() {
     }
   };
 
-  const completeTodo = (id: number) => {
+  const completeTodo = (id: string) => {
     setTodos(
       todos.map(todo => {
         if (todo.id === id) {
