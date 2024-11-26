@@ -1,31 +1,24 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
+interface Todo {
+  id: string;
+  content: string;
+  isComplete: boolean;
+}
+
 function Popup() {
   // TODO : 데이터를 indexedDB에 저장하고 관리할 수 있도록 작업 예정
-  const [todos, setTodos] = useState([
-    {
-      id: uuidv4(),
-      content: '할 일 1',
-      isComplete: false,
-    },
-  ]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
 
-  // 임시로 id값은 배열의 길이로 설정
   const addTodo = () => {
     if (typeof newTodo === 'string' && newTodo.length > 0) {
       setTodos([
         ...todos,
-        {
-          id: uuidv4(),
-          content: newTodo,
-          isComplete: false,
-        },
+        { id: uuidv4(), content: newTodo, isComplete: false },
       ]);
       setNewTodo('');
-    } else {
-      alert('할 일을 입력하세요.');
     }
   };
 
