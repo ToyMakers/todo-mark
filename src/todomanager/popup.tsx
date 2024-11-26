@@ -6,7 +6,7 @@ function Popup() {
     {
       id: 0,
       content: '할 일 1',
-      completeDate: new Date().toISOString().split('T')[0],
+      dueDate: new Date().toISOString().split('T')[0],
       isComplete: false,
     },
   ]);
@@ -20,7 +20,7 @@ function Popup() {
         {
           id: todos.length,
           content: newTodo,
-          completeDate: new Date().toISOString().split('T')[0],
+          dueDate: new Date().toISOString().split('T')[0],
           isComplete: false,
         },
       ]);
