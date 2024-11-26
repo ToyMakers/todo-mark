@@ -1,168 +1,101 @@
-import { useEffect, useState } from 'react';
-import { getTodobyId, updateTodo } from '../db/dbManager';
-import { Todo } from '../db/todoSchemas';
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
-function Detail({ id, onBack }: { id: string; onBack: () => void }) {
-  const [isModify, setIsModify] = useState(false);
-  const [selectedTodo, setSelectedTodo] = useState<Todo>();
+interface TodoDetail {
+  id: string;
+  content: string;
+  detail: string;
+  dueDate: string;
+  isComplete: boolean;
+}
 
-  useEffect(() => {
-    const fetchTodo = async () => {
-      const result = (await getTodobyId(id)) as Todo;
-      setSelectedTodo(result);
-    };
+function Detail() {
+  const [todos, setTodos] = useState<TodoDetail[]>([]);
+  const [newTodo, setNewTodo] = useState('');
+  const [newDetail, setNewDetail] = useState('');
+  const [newDueDate, setNewDueDate] = useState('');
 
-    fetchTodo();
-  }, [id]);
+  const [isModifyTitle, setIsModifyTitle] = useState(false);
 
-  const calculateDday = (dueDate: Date) => {
-    const result = Math.ceil(
-      (dueDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
+  const addTodo = () => {
+    if (newTodo && newDetail && newDueDate) {
+      setTodos([
+        ...todos,
+        {
+          id: uuidv4(),
+          content: newTodo,
+          detail: newDetail,
+          dueDate: newDueDate,
+          isComplete: false,
+        },
+      ]);
+      setNewTodo('');
+      setNewDetail('');
+      setNewDueDate('');
+    }
+  };
+
+  const completeTodo = (id: string) => {
+    setTodos(
+      todos.map(todo => {
+        if (todo.id === id) {
+          return { ...todo, isComplete: !todo.isComplete };
+        }
+        return todo;
+      }),
     );
-    if (result < 0) {
-      return `D+${Math.abs(result)}`;
-    }
-    return `D-${result}`;
-  };
-
-  const handleIsModify = () => {
-    setIsModify(!isModify);
-  };
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target as HTMLInputElement | HTMLTextAreaElement;
-    const { checked } = e.target as HTMLInputElement;
-
-    if (selectedTodo) {
-      setSelectedTodo(prevTodo => {
-        if (!prevTodo) return prevTodo;
-        if (name === 'isComplete') {
-          return {
-            ...prevTodo,
-            isComplete: checked,
-          };
-        }
-        if (name !== 'description') {
-          if (name === 'dueDate') {
-            return {
-              ...prevTodo,
-              [name]: new Date(value),
-            };
-          }
-          return {
-            ...prevTodo,
-            [name]: value,
-          };
-        }
-        return {
-          ...prevTodo,
-          todoDetail: {
-            ...prevTodo.todoDetail,
-            [name]: value,
-          },
-        };
-      });
-      updateTodo({
-        ...selectedTodo,
-        [name]: name === 'isComplete' ? checked : value,
-      });
-    }
   };
 
   return (
-    <div className="flex flex-col p-4 space-y-4">
-      <section className="flex justify-between items-center w-full">
-        <button
-          type="button"
-          onClick={onBack}
-          className="bg-brown-500 text-white rounded px-4 py-2 hover:bg-brown-600"
-        >
-          목록
-        </button>
-        <div className="flex justify-center items-center space-y-2 w-full">
-          {!isModify ? (
-            <div className="flex justify-around items-center space-x-2 w-full">
-              <div className="text-lg">{selectedTodo?.title}</div>
-              <div className="text-sm text-gray-600">
-                {selectedTodo?.dueDate && (
-                  <div>{calculateDday(selectedTodo?.dueDate)}</div>
-                )}
-              </div>
+    <div>
+      <div>
+        <h1>디테일</h1>
+        <div>
+          {todos.map(todo => (
+            <div key={todo.id}>
+              <div>{todo.content}</div>
+              <div>{todo.detail}</div>
+              <div>{todo.dueDate}</div>
               <input
                 type="checkbox"
-                name="isComplete"
-                checked={selectedTodo?.isComplete}
-                onChange={handleInputChange}
-                className="w-5 h-5 items-center align-middle custom-checkbox"
+                checked={todo.isComplete}
+                onChange={() => completeTodo(todo.id)}
               />
+              <button>수정</button>
+            </div>
+          ))}
+        </div>
+        <div>
+          {!isModifyTitle ? (
+            <div>
+              <p>할 일 제목</p>
+              <button onClick={() => setIsModifyTitle(true)}>수정</button>
             </div>
           ) : (
-            <div className="flex-col justify-around items-center space-x-2 w-full">
-              <div className="flex">
-                <input
-                  type="text"
-                  name="title"
-                  value={selectedTodo?.title}
-                  onChange={handleInputChange}
-                  defaultValue={selectedTodo?.title}
-                  className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-40"
-                />
-                <input
-                  type="checkbox"
-                  name="isComplete"
-                  onChange={handleInputChange}
-                  checked={selectedTodo?.isComplete}
-                  className="w-5 h-5 items-center align-middle custom-checkbox"
-                />
-              </div>
+            <div>
               <input
-                type="date"
-                name="dueDate"
-                value={selectedTodo?.dueDate?.toISOString().split('T')[0]}
-                onChange={handleInputChange}
-                defaultValue={
-                  selectedTodo?.dueDate?.toISOString().split('T')[0]
-                }
-                className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-28 "
+                value={newTodo}
+                onChange={e => setNewTodo(e.target.value)}
+                type="text"
+                placeholder="할 일을 입력하세요."
               />
+              <button onClick={() => setIsModifyTitle(false)}>완료</button>
             </div>
           )}
+          <input
+            value={newDetail}
+            onChange={e => setNewDetail(e.target.value)}
+            type="text"
+            placeholder="세부 내용을 입력하세요."
+          />
+          <input
+            value={newDueDate}
+            onChange={e => setNewDueDate(e.target.value)}
+            type="date"
+          />
+          <button onClick={addTodo}>추가</button>
         </div>
-      </section>
-      <section>
-        {!isModify ? (
-          <>
-            <div>{selectedTodo?.todoDetail.description}</div>
-            <div className="h-32" />
-            <button
-              type="button"
-              onClick={() => handleIsModify()}
-              className="bg-brown-500 text-white rounded px-4 py-2 hover:bg-brown-600"
-            >
-              수정
-            </button>
-          </>
-        ) : (
-          <>
-            <textarea
-              className="w-full h-32 p-2 border border-brown-400 rounded resize-none focus:ring-2 focus:ring-brown-400 focus:outline-none"
-              value={selectedTodo?.todoDetail.description}
-              name="description"
-              onChange={handleInputChange}
-              defaultValue={selectedTodo?.todoDetail.description}
-            />
-            <button
-              type="button"
-              onClick={() => handleIsModify()}
-              className="bg-brown-500 text-white rounded px-4 py-2 hover:bg-brown-600"
-            >
-              저장
-            </button>
-          </>
-        )}
-      </section>
+      </div>
     </div>
   );
 }
