@@ -1,28 +1,23 @@
-import { useState } from 'react';
+// import { useState } from 'react';
+// import TodoList from './todo';
 import Detail from './detail';
 
+// interface Todo {
+//   id: string;
+//   content: string;
+//   isComplete: boolean;
+// }
+
 function Popup() {
-  const [selectedId, setSelectedId] = useState('');
-  const [currentView, setCurrentView] = useState('list');
-
-  const handleSelectTodo = (id: string, view: string) => {
-    setSelectedId(id);
-    setCurrentView(view);
-  };
-
-  const handleBack = () => {
-    setSelectedId('');
-    setCurrentView('list');
-  };
+  // const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   return (
-    <div className="p-2">
-      <div className="w-80 h-10">
-        {currentView === 'list' && <TodoList onSelectTodo={handleSelectTodo} />}
-        {currentView === 'detail' && (
-          <Detail id={selectedId} onBack={handleBack} />
-        )}
+    <div>
+      <div className="w-32 h-10">
+        <h1>투두막</h1>
       </div>
+      <Detail />
+      {/* {selectedTodo ? <Detail /> : <TodoList />} */}
     </div>
   );
 }
