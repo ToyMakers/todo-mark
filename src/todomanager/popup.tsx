@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 function Popup() {
-  const Alert = alert;
   // TODO : 데이터를 indexedDB에 저장하고 관리할 수 있도록 작업 예정
   const [todos, setTodos] = useState([
     {
@@ -27,7 +26,7 @@ function Popup() {
       ]);
       setNewTodo('');
     } else {
-      Alert('할 일을 입력하세요.');
+      alert('할 일을 입력하세요.');
     }
   };
 
@@ -42,7 +41,7 @@ function Popup() {
     );
     todos.forEach(todo => {
       if (todo.id === id && !todo.done) {
-        Alert(`${todo.content} 완료!`);
+        alert(`${todo.content} 완료!`);
       }
     });
   };
