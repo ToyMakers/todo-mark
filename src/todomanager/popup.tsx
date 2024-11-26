@@ -28,7 +28,8 @@ function Popup() {
     }
   };
 
-  const completeTodo = (id: string) => {
+  const completeTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const id = e.target.value;
     setTodos(
       todos.map(todo => {
         if (todo.id === id) {
@@ -52,7 +53,10 @@ function Popup() {
               <input
                 type="checkbox"
                 checked={todo.isComplete}
-                onChange={() => completeTodo(todo.id)}
+                value={todo.id}
+                onChange={e => {
+                  completeTodo(e);
+                }}
               />
             </div>
           ))}
