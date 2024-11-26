@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 function Popup() {
   const Alert = alert;
-  // 임시로 useState로 데이터 저장 [indexedDB로 데이터를 저장하고 불러올 수 있게 작업 예정]
+  // TODO : 데이터를 indexedDB에 저장하고 관리할 수 있도록 작업 예정
   const [todos, setTodos] = useState([
     {
       id: 0,
