@@ -7,7 +7,7 @@ function Popup() {
       id: 0,
       content: '할 일 1',
       dueDate: new Date().toISOString().split('T')[0],
-      done: false,
+      isComplete: false,
     },
   ]);
   const [newTodo, setNewTodo] = useState('');
@@ -21,7 +21,7 @@ function Popup() {
           id: todos.length,
           content: newTodo,
           dueDate: new Date().toISOString().split('T')[0],
-          done: false,
+          isComplete: false,
         },
       ]);
       setNewTodo('');
@@ -34,13 +34,13 @@ function Popup() {
     setTodos(
       todos.map(todo => {
         if (todo.id === id) {
-          return { ...todo, done: !todo.done };
+          return { ...todo, isComplete: !todo.isComplete };
         }
         return todo;
       }),
     );
     todos.forEach(todo => {
-      if (todo.id === id && !todo.done) {
+      if (todo.id === id && !todo.isComplete) {
         alert(`${todo.content} 완료!`);
       }
     });
@@ -58,7 +58,7 @@ function Popup() {
               <div>{todo.content}</div>
               <input
                 type="checkbox"
-                checked={todo.done}
+                checked={todo.isComplete}
                 onChange={() => completeTodo(todo.id)}
               />
             </div>
