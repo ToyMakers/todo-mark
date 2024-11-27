@@ -13,6 +13,11 @@ function Popup() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
 
+  const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTodoContent = e.target.value;
+    setNewTodo(newTodoContent);
+  };
+
   const addTodo = () => {
     if (typeof newTodo === 'string' && newTodo.length > 0) {
       setTodos([
@@ -54,9 +59,7 @@ function Popup() {
                 type="checkbox"
                 checked={todo.isComplete}
                 value={todo.id}
-                onChange={e => {
-                  completeTodo(e);
-                }}
+                onChange={completeTodo}
               />
             </div>
           ))}
@@ -65,7 +68,7 @@ function Popup() {
           <input
             id="todo-input"
             value={newTodo}
-            onChange={e => setNewTodo(e.target.value)}
+            onChange={handleNewTodo}
             type="text"
             placeholder="할 일을 입력하세요."
           />
