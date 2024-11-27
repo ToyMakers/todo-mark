@@ -12,8 +12,8 @@ function Popup() {
   // TODO : 데이터를 indexedDB에 저장하고 관리할 수 있도록 작업 예정
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
-  const [editTodoId, setEditTodoId] = useState<string | null>(null); // 수정 중인 투두의 ID
-  const [editTodoContent, setEditTodoContent] = useState(''); // 수정 중인 내용
+  const [editTodoId, setEditTodoId] = useState<string | null>(null);
+  const [editTodoContent, setEditTodoContent] = useState('');
 
   const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodoContent = e.target.value;
@@ -48,7 +48,7 @@ function Popup() {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
-  const handleEditTodoContent = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEditTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditTodoContent(e.target.value);
   };
 
@@ -88,7 +88,7 @@ function Popup() {
                 <input
                   type="text"
                   value={editTodoContent}
-                  onChange={handleEditTodoContent}
+                  onChange={handleEditTodo}
                   className="border rounded px-1"
                 />
               ) : (
