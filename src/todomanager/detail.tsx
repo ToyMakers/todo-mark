@@ -12,27 +12,31 @@ function Detail() {
       <section className="flex justify-between items-center w-full">
         <div className="flex justify-center items-center space-y-2 w-full">
           {!isModify ? (
-            <div className="flex justify-center items-center">
+            <div className="flex justify-around items-center space-x-2 w-full">
               <div className="text-lg">투두 제목 보이기[예시]</div>
               <div className="text-sm text-gray-600">D-13[예시]</div>
+              <input
+                type="checkbox"
+                className="w-5 h-5 items-center align-middle custom-checkbox"
+              />
             </div>
           ) : (
-            <div className="flex justify-center items-center space-x-2 w-full">
+            <div className="flex justify-around items-center space-x-2 w-full">
               <input
                 type="text"
                 defaultValue="투두 제목 보이기"
-                className="border border-gray-300 rounded p-2 text-sm w-40"
+                className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-40"
               />
               <input
                 type="date"
-                className="border border-gray-300 rounded p-2 text-sm w-40"
+                className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-28 "
+              />
+              <input
+                type="checkbox"
+                className="w-5 h-5 items-center align-middle custom-checkbox"
               />
             </div>
           )}
-          <input
-            type="checkbox"
-            className="w-5 h-5 items-center align-middle custom-checkbox"
-          />
         </div>
       </section>
       <section>
