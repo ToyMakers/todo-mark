@@ -42,36 +42,47 @@ function Popup() {
     );
   };
 
+  const deleteTodo = (id: string) => {
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
+
   return (
-    <div>
-      <div className="w-32 h-10">
-        <h1>투두막</h1>
+    <div className="text-[13px]">
+      <div className="w-40 h-10">
+        <h1 className="text-[13px]">투두막</h1>
       </div>
-      <div className="flex-col w-32 h-32">
-        <div className=" h-16 overflow-y-scroll">
+      <div className="flex-col w-full h-min-32 h-32">
+        <div className="w-full overflow-y-scroll">
           {todos.map(todo => (
-            <div key={todo.id} className="flex">
-              <div>{todo.content}</div>
+            <div key={todo.id} className="flex justify-between">
               <input
                 type="checkbox"
                 checked={todo.isComplete}
                 value={todo.id}
                 onChange={completeTodo}
               />
+              <div>{todo.content}</div>
+              <button
+                type="button"
+                onClick={() => deleteTodo(todo.id)}
+                className="text-red-500"
+              >
+                삭제
+              </button>
             </div>
           ))}
         </div>
-        <div className="flex">
+        <div className="w-full flex">
           <input
             value={newTodo}
             onChange={handleNewTodo}
             type="text"
             placeholder="할 일을 입력하세요."
           />
+          <button type="submit" onClick={() => addTodo()}>
+            추가
+          </button>
         </div>
-        <button type="submit" onClick={() => addTodo()}>
-          추가
-        </button>
       </div>
     </div>
   );
