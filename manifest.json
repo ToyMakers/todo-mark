@@ -5,7 +5,7 @@
   "description": "markdown todolist",
   "action": {
     "default_title": "todomark",
-    "default_popup": "popup.html"
+    "default_popup": "index.html"
   },
   "permissions": ["storage"],
   "background": {
