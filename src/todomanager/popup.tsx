@@ -36,12 +36,9 @@ function Popup() {
   const completeTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.value;
     setTodos(
-      todos.map(todo => {
-        if (todo.id === id) {
-          return { ...todo, isComplete: !todo.isComplete };
-        }
-        return todo;
-      }),
+      todos.map(todo =>
+        todo.id === id ? { ...todo, isComplete: !todo.isComplete } : todo,
+      ),
     );
   };
 
