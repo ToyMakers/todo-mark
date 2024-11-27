@@ -11,16 +11,22 @@ if (!window.indexedDB) {
     db = e.target.result;
 
     if (!db.objectStoreNames.contains('TODO')) {
-      const objectStore = db.createObjectStore('TODO', { keyPath: 'id' });
+      const todoStore = db.createObjectStore('TODO', { keyPath: 'todoId' });
 
-      objectStore.createIndex('title', 'title', { unique: false });
-      objectStore.createIndex('content', 'content', { unique: false });
-      objectStore.createIndex('dueDate', 'dueDate', { unique: false });
-      objectStore.createIndex('isComplete', 'isComplete', { unique: false });
+      todoStore.createIndex('todoId', 'todoId', { unique: true });
+      todoStore.createIndex('title', 'title', { unique: false });
+      todoStore.createIndex('content', 'content', { unique: false });
+      todoStore.createIndex('dueDate', 'dueDate', { unique: false });
+      todoStore.createIndex('isCompleted', 'isCompleted', { unique: false });
     }
   };
+
   request.onsuccess = e => {
     db = e.target.result;
+    console.log('DB 연결 성공:', db);
   };
-  request.onerror = () => alert('DB 열기 실패');
+
+  request.onerror = e => {
+    alert('DB 열기 실패:', e.target.error);
+  };
 }
