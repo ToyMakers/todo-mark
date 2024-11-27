@@ -48,7 +48,7 @@ function Popup() {
         <h1>투두막</h1>
       </div>
       <div className="flex-col w-32 h-32">
-        <div id="todo-list" className=" h-16 overflow-y-scroll">
+        <div className=" h-16 overflow-y-scroll">
           {todos.map(todo => (
             <div key={todo.id} className="flex">
               <div>{todo.content}</div>
@@ -63,14 +63,13 @@ function Popup() {
         </div>
         <div className="flex">
           <input
-            id="todo-input"
             value={newTodo}
             onChange={handleNewTodo}
             type="text"
             placeholder="할 일을 입력하세요."
           />
         </div>
-        <button id="add-todo" type="submit" onClick={() => addTodo()}>
+        <button type="submit" onClick={() => addTodo()}>
           추가
         </button>
       </div>
