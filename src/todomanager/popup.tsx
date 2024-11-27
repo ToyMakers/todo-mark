@@ -70,8 +70,8 @@ function Popup() {
   };
 
   return (
-    <div className="text-[13px]">
-      <div className="max-w-80 w-80 h-10">
+    <div className="text-[13px] p-2">
+      <div className="w-80 h-10">
         <h1 className="text-[13px]">투두막</h1>
       </div>
       <div className="flex-col w-full ">
@@ -92,7 +92,9 @@ function Popup() {
                   className="border rounded px-1"
                 />
               ) : (
-                <div className="max-w-40 text-ellipsis">{todo.content}</div>
+                <div className="w-40 text-left break-words whitespace-normal">
+                  {todo.content}
+                </div>
               )}
 
               <div className="flex items-center gap-2">
@@ -124,7 +126,7 @@ function Popup() {
             </div>
           ))}
         </div>
-        <div className="max-w-80 w-80 flex justify-between">
+        <div className="w-80 flex justify-between">
           <input
             value={newTodo}
             onChange={handleNewTodo}
