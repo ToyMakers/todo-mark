@@ -13,11 +13,10 @@ if (!window.indexedDB) {
     if (!db.objectStoreNames.contains('TODO')) {
       const todoStore = db.createObjectStore('TODO', { keyPath: 'todoId' });
 
-      todoStore.createIndex('todoId', 'todoId', { unique: true });
       todoStore.createIndex('title', 'title', { unique: false });
       todoStore.createIndex('content', 'content', { unique: false });
       todoStore.createIndex('dueDate', 'dueDate', { unique: false });
-      todoStore.createIndex('isCompleted', 'isCompleted', { unique: false });
+      todoStore.createIndex('isComplete', 'isComplete', { unique: false });
     }
   };
 
