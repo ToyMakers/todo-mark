@@ -12,8 +12,10 @@ function Popup() {
   // TODO : 데이터를 indexedDB에 저장하고 관리할 수 있도록 작업 예정
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
-  const [editTodoId, setEditTodoId] = useState<string | null>(null);
-  const [editTodoContent, setEditTodoContent] = useState('');
+  const [editTodo, setEditTodo] = useState<{
+    id: string;
+    content: string;
+  } | null>(null);
 
   const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodoContent = e.target.value;
@@ -49,23 +51,24 @@ function Popup() {
   };
 
   const handleEditTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditTodoContent(e.target.value);
+    if (editTodo) {
+      setEditTodo({ ...editTodo, content: e.target.value });
+    }
   };
-
-  const startEditTodo = (id: string, content: string) => {
-    setEditTodoId(id);
-    setEditTodoContent(content);
+  const startEditTodo = (todo: Todo) => {
+    setEditTodo({ id: todo.id, content: todo.content });
   };
 
   const saveEditTodo = () => {
-    if (editTodoId && editTodoContent.length > 0) {
+    if (editTodo) {
       setTodos(
         todos.map(todo =>
-          todo.id === editTodoId ? { ...todo, content: editTodoContent } : todo,
+          todo.id === editTodo.id
+            ? { ...todo, content: editTodo.content }
+            : todo,
         ),
       );
-      setEditTodoId(null);
-      setEditTodoContent('');
+      setEditTodo(null);
     }
   };
 
@@ -84,10 +87,10 @@ function Popup() {
                 value={todo.id}
                 onChange={completeTodo}
               />
-              {editTodoId === todo.id ? (
+              {editTodo?.id === todo.id ? (
                 <input
                   type="text"
-                  value={editTodoContent}
+                  value={editTodo.content}
                   onChange={handleEditTodo}
                   className="border rounded px-1"
                 />
@@ -98,7 +101,7 @@ function Popup() {
               )}
 
               <div className="flex items-center gap-2">
-                {editTodoId === todo.id ? (
+                {editTodo?.id === todo.id ? (
                   <button
                     type="button"
                     onClick={saveEditTodo}
@@ -109,7 +112,7 @@ function Popup() {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => startEditTodo(todo.id, todo.content)}
+                    onClick={() => startEditTodo(todo)}
                     className="text-blue-500"
                   >
                     수정
