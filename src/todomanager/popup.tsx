@@ -1,49 +1,45 @@
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
+interface Todo {
+  id: string;
+  content: string;
+  dueDate?: Date;
+  isComplete: boolean;
+}
 
 function Popup() {
   // TODO : 데이터를 indexedDB에 저장하고 관리할 수 있도록 작업 예정
-  const [todos, setTodos] = useState([
-    {
-      id: 0,
-      content: '할 일 1',
-      dueDate: new Date().toISOString().split('T')[0],
-      isComplete: false,
-    },
-  ]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
 
-  // 임시로 id값은 배열의 길이로 설정
+  const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTodoContent = e.target.value;
+    setNewTodo(newTodoContent);
+  };
+
   const addTodo = () => {
     if (typeof newTodo === 'string' && newTodo.length > 0) {
       setTodos([
         ...todos,
         {
-          id: todos.length,
+          id: uuidv4(),
           content: newTodo,
-          dueDate: new Date().toISOString().split('T')[0],
+          dueDate: undefined,
           isComplete: false,
         },
       ]);
       setNewTodo('');
-    } else {
-      alert('할 일을 입력하세요.');
     }
   };
 
-  const completeTodo = (id: number) => {
+  const completeTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const id = e.target.value;
     setTodos(
-      todos.map(todo => {
-        if (todo.id === id) {
-          return { ...todo, isComplete: !todo.isComplete };
-        }
-        return todo;
-      }),
+      todos.map(todo =>
+        todo.id === id ? { ...todo, isComplete: !todo.isComplete } : todo,
+      ),
     );
-    todos.forEach(todo => {
-      if (todo.id === id && !todo.isComplete) {
-        alert(`${todo.content} 완료!`);
-      }
-    });
   };
 
   return (
@@ -52,28 +48,28 @@ function Popup() {
         <h1>투두막</h1>
       </div>
       <div className="flex-col w-32 h-32">
-        <div id="todo-list" className=" h-16 overflow-y-scroll">
+        <div className=" h-16 overflow-y-scroll">
           {todos.map(todo => (
             <div key={todo.id} className="flex">
               <div>{todo.content}</div>
               <input
                 type="checkbox"
                 checked={todo.isComplete}
-                onChange={() => completeTodo(todo.id)}
+                value={todo.id}
+                onChange={completeTodo}
               />
             </div>
           ))}
         </div>
         <div className="flex">
           <input
-            id="todo-input"
             value={newTodo}
-            onChange={e => setNewTodo(e.target.value)}
+            onChange={handleNewTodo}
             type="text"
             placeholder="할 일을 입력하세요."
           />
         </div>
-        <button id="add-todo" type="submit" onClick={() => addTodo()}>
+        <button type="submit" onClick={() => addTodo()}>
           추가
         </button>
       </div>
