@@ -8,46 +8,61 @@ function Detail() {
   };
 
   return (
-    <div>
-      <div>
-        <div>
+    <div className="flex flex-col p-4 space-y-4">
+      <section className="flex justify-between items-center w-full">
+        <div className="flex justify-center items-center space-y-2 w-full">
           {!isModify ? (
-            <div className="flex-col ">
-              <section className="flex justify-between align-middle">
-                <div className="w-52 h-10 flex align-middle text-lg">
-                  투두 제목 보이기
-                </div>
-                <div className="w-52 h-10">
-                  <input type="checkbox" className="custom-checkbox" />
-                </div>
-              </section>
-              <div className="w-52 h-10"> 세부 내용 </div>
-              <div className="w-52 h-10"> 마감 날짜</div>
-              <button type="button" onClick={() => handleIsModify()}>
-                수정
-              </button>
+            <div className="flex justify-center items-center">
+              <div className="text-lg">투두 제목 보이기[예시]</div>
+              <div className="text-sm text-gray-600">D-13[예시]</div>
             </div>
           ) : (
-            <div className="flex-col">
-              <section className="flex justify-between align-middle">
-                <div className="w-52 h-10 flex align-middle text-lg">
-                  투두 제목 보이기
-                </div>
-                <div className="w-52 h-10">
-                  <input type="checkbox" className="custom-checkbox" />
-                </div>
-              </section>
-              <div className="w-52 h-10" />
-              <div className="w-52 h-10">
-                <input type="date" />
-              </div>
-              <button type="button" onClick={() => handleIsModify()}>
-                저장
-              </button>
+            <div className="flex justify-center items-center space-x-2 w-full">
+              <input
+                type="text"
+                defaultValue="투두 제목 보이기"
+                className="border border-gray-300 rounded p-2 text-sm w-40"
+              />
+              <input
+                type="date"
+                className="border border-gray-300 rounded p-2 text-sm w-40"
+              />
             </div>
           )}
+          <input
+            type="checkbox"
+            className="w-5 h-5 items-center align-middle custom-checkbox"
+          />
         </div>
-      </div>
+      </section>
+      <section>
+        {!isModify ? (
+          <>
+            <div className="h-32" />
+            <button
+              type="button"
+              onClick={() => handleIsModify()}
+              className="bg-brown-500 text-white rounded px-4 py-2 hover:bg-brown-600"
+            >
+              수정
+            </button>
+          </>
+        ) : (
+          <>
+            <textarea
+              className="w-full h-32 p-2 border border-brown-400 rounded resize-none focus:ring-2 focus:ring-brown-400 focus:outline-none"
+              defaultValue="세부 내용"
+            />
+            <button
+              type="button"
+              onClick={() => handleIsModify()}
+              className="bg-brown-500 text-white rounded px-4 py-2 hover:bg-brown-600"
+            >
+              저장
+            </button>
+          </>
+        )}
+      </section>
     </div>
   );
 }
