@@ -9,7 +9,7 @@ export default defineConfig({
       input: {
         background: 'src/background.ts',
         main: 'src/main.tsx',
-        db: 'src/db/indexedDB.ts',
+        db: 'src/db/dbManager.ts',
       },
       output: {
         entryFileNames: '[name].js',
