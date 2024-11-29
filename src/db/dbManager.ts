@@ -7,39 +7,37 @@ interface TODO {
 }
 const DB_NAME = 'TODO_DB';
 
-export const createDB = (): Promise<IDBDatabase> => {
-  return new Promise((resolve, reject) => {
-    if (!window.indexedDB) {
-      reject(new Error('해당 브라우저에서는 indexedDB를 지원하지 않습니다.'));
+export const createDB = () => {
+  if (!window.indexedDB) {
+    throw new Error('해당 브라우저에서는 indexedDB를 지원하지 않습니다.');
+  }
+
+  const request = window.indexedDB.open(DB_NAME, 1);
+
+  request.onupgradeneeded = e => {
+    const target = e.target as IDBOpenDBRequest;
+    const db = target.result;
+
+    if (!db.objectStoreNames.contains('TODO')) {
+      const todoStore = db.createObjectStore('TODO', { keyPath: 'id' });
+
+      todoStore.createIndex('title', 'title', { unique: false });
+      todoStore.createIndex('content', 'content', { unique: false });
+      todoStore.createIndex('dueDate', 'dueDate', { unique: false });
+      todoStore.createIndex('isComplete', 'isComplete', { unique: false });
     }
+  };
 
-    const request = window.indexedDB.open(DB_NAME, 1);
+  request.onsuccess = e => {
+    const target = e.target as IDBOpenDBRequest;
+    const db = target.result;
+    return db;
+  };
 
-    request.onupgradeneeded = e => {
-      const target = e.target as IDBOpenDBRequest;
-      const db = target.result;
-
-      if (!db.objectStoreNames.contains('TODO')) {
-        const todoStore = db.createObjectStore('TODO', { keyPath: 'id' });
-
-        todoStore.createIndex('title', 'title', { unique: false });
-        todoStore.createIndex('content', 'content', { unique: false });
-        todoStore.createIndex('dueDate', 'dueDate', { unique: false });
-        todoStore.createIndex('isComplete', 'isComplete', { unique: false });
-      }
-    };
-
-    request.onsuccess = e => {
-      const target = e.target as IDBOpenDBRequest;
-      const db = target.result;
-      resolve(db);
-    };
-
-    request.onerror = e => {
-      const target = e.target as IDBOpenDBRequest;
-      console.error('DB 생성 실패:', target.error);
-    };
-  });
+  request.onerror = e => {
+    const target = e.target as IDBOpenDBRequest;
+    throw new Error(`DB 생성 실패 : ${target.error}`);
+  };
 };
 
 export const addToDB = (todo: TODO) => {
