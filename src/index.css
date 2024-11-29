@@ -30,7 +30,7 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  font-size: 0.875rem;
+  font-size: 14px;
   min-width: 320px;
   min-height: 100vh;
 }
