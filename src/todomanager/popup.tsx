@@ -78,7 +78,7 @@ function Popup() {
         <h1 className="text-[13px]">투두막</h1>
       </div>
       <div className="flex-col w-full ">
-        <div className="max-w-80 h-[200px] overflow-y-auto">
+        <div className="max-w-80 h-52 overflow-y-auto">
           {todos.map(todo => (
             <div key={todo.id} className="flex justify-between my-1">
               <input
