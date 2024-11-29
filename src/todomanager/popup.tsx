@@ -90,7 +90,7 @@ function Popup() {
   };
 
   return (
-    <div className="text-[13px] p-2">
+    <div className="text-sm p-2">
       <div className="w-80 h-10">
         <h1 className="text-sm">투두막</h1>
       </div>
