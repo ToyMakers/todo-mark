@@ -137,7 +137,7 @@ function Popup() {
             placeholder="할 일을 입력하세요."
             className="w-64"
           />
-          <button type="submit" onClick={() => addTodo()}>
+          <button type="submit" onClick={addTodo}>
             추가
           </button>
         </div>
