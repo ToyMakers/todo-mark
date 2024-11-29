@@ -22,7 +22,7 @@ function Popup() {
     setNewTodo(newTodoContent);
   };
 
-  const addTodo = () => {
+  const handleAddTodo = () => {
     if (typeof newTodo === 'string' && newTodo.length > 0) {
       setTodos([
         ...todos,
@@ -37,7 +37,7 @@ function Popup() {
     }
   };
 
-  const completeTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCompleteTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.value;
     setTodos(
       todos.map(todo =>
@@ -46,7 +46,7 @@ function Popup() {
     );
   };
 
-  const deleteTodo = (id: string) => {
+  const handleDeleteTodo = (id: string) => {
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
@@ -55,11 +55,11 @@ function Popup() {
       setEditTodo({ ...editTodo, content: e.target.value });
     }
   };
-  const startEditTodo = (todo: Todo) => {
+  const handleStartEditTodo = (todo: Todo) => {
     setEditTodo({ id: todo.id, content: todo.content });
   };
 
-  const saveEditTodo = () => {
+  const handleSaveEditTodo = () => {
     if (editTodo) {
       setTodos(
         todos.map(todo =>
@@ -85,7 +85,7 @@ function Popup() {
                 type="checkbox"
                 checked={todo.isComplete}
                 value={todo.id}
-                onChange={completeTodo}
+                onChange={handleCompleteTodo}
               />
               {editTodo?.id === todo.id ? (
                 <input
@@ -104,7 +104,7 @@ function Popup() {
                 {editTodo?.id === todo.id ? (
                   <button
                     type="button"
-                    onClick={saveEditTodo}
+                    onClick={handleSaveEditTodo}
                     className="text-green-500"
                   >
                     저장
@@ -112,7 +112,7 @@ function Popup() {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => startEditTodo(todo)}
+                    onClick={() => handleStartEditTodo(todo)}
                     className="text-blue-500"
                   >
                     수정
@@ -120,7 +120,7 @@ function Popup() {
                 )}
                 <button
                   type="button"
-                  onClick={() => deleteTodo(todo.id)}
+                  onClick={() => handleDeleteTodo(todo.id)}
                   className="text-red-500"
                 >
                   삭제
@@ -137,7 +137,7 @@ function Popup() {
             placeholder="할 일을 입력하세요."
             className="w-64"
           />
-          <button type="submit" onClick={addTodo}>
+          <button type="submit" onClick={handleAddTodo}>
             추가
           </button>
         </div>
