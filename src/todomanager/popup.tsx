@@ -1,14 +1,24 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { createDB, addToDB } from '../db/dbManager';
 
 interface Todo {
   id: string;
+  title: string;
   content: string;
   dueDate?: Date;
   isComplete: boolean;
 }
 
 function Popup() {
+  (async () => {
+    try {
+      const db = await createDB();
+      console.log('데이터베이스 연결 성공:', db);
+    } catch (error) {
+      console.error('데이터베이스 연결 실패:', error);
+    }
+  })();
   // TODO : 데이터를 indexedDB에 저장하고 관리할 수 있도록 작업 예정
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
@@ -28,11 +38,18 @@ function Popup() {
         ...todos,
         {
           id: uuidv4(),
+          title: newTodo,
           content: newTodo,
           dueDate: undefined,
           isComplete: false,
         },
       ]);
+      addToDB({
+        id: uuidv4(),
+        title: newTodo,
+        content: newTodo,
+        isComplete: false,
+      });
       setNewTodo('');
     }
   };
