@@ -92,7 +92,7 @@ function Popup() {
   return (
     <div className="text-[13px] p-2">
       <div className="w-80 h-10">
-        <h1 className="text-[13px]">투두막</h1>
+        <h1 className="text-sm">투두막</h1>
       </div>
       <div className="flex-col w-full ">
         <div className="max-w-80 h-52 overflow-y-auto">
