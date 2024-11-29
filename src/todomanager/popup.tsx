@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { createDB, addToDB } from '../db/dbManager';
+import { createDB, addToDB, getAllTodos } from '../db/dbManager';
 
 interface Todo {
   id: string;
@@ -11,15 +11,7 @@ interface Todo {
 }
 
 function Popup() {
-  (async () => {
-    try {
-      const db = await createDB();
-      console.log('데이터베이스 연결 성공:', db);
-    } catch (error) {
-      console.error('데이터베이스 연결 실패:', error);
-    }
-  })();
-  // TODO : 데이터를 indexedDB에 저장하고 관리할 수 있도록 작업 예정
+  createDB();
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [editTodo, setEditTodo] = useState<{
@@ -27,29 +19,41 @@ function Popup() {
     content: string;
   } | null>(null);
 
+  const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
+
   const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodoContent = e.target.value;
     setNewTodo(newTodoContent);
   };
 
+  const getTodosFromDB = async () => {
+    const todoList = await getAllTodos();
+    setTodoFromDB(
+      todoList.map(todo => ({
+        id: todo.id,
+        title: todo.title || '',
+        content: todo.content || '',
+        dueDate: todo.dueDate ? new Date(todo.dueDate) : undefined,
+        isComplete: todo.isComplete,
+      })),
+    );
+  };
+
+  const fetchTodos = async () => {
+    await getTodosFromDB();
+  };
+
   const handleAddTodo = () => {
     if (typeof newTodo === 'string' && newTodo.length > 0) {
-      setTodos([
-        ...todos,
-        {
-          id: uuidv4(),
-          title: newTodo,
-          content: newTodo,
-          dueDate: undefined,
-          isComplete: false,
-        },
-      ]);
-      addToDB({
+      const newTodoItem = {
         id: uuidv4(),
         title: newTodo,
         content: newTodo,
+        dueDate: undefined,
         isComplete: false,
-      });
+      };
+      setTodos(prevTodos => [...prevTodos, newTodoItem]);
+      addToDB(newTodoItem);
       setNewTodo('');
     }
   };
@@ -89,6 +93,10 @@ function Popup() {
     }
   };
 
+  useEffect(() => {
+    fetchTodos();
+  }, [todoFromDB]);
+
   return (
     <div className="text-sm p-2">
       <div className="w-80 h-10">
@@ -96,7 +104,7 @@ function Popup() {
       </div>
       <div className="flex-col w-full ">
         <div className="max-w-80 h-52 overflow-y-auto">
-          {todos.map(todo => (
+          {todoFromDB.map(todo => (
             <div key={todo.id} className="flex justify-between my-1">
               <input
                 type="checkbox"
