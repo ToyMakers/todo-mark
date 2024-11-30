@@ -42,9 +42,10 @@ export const createDB = () => {
 
 export const addToDB = (todo: TODO) => {
   const request = window.indexedDB.open(DB_NAME);
+
   request.onerror = e => {
     const target = e.target as IDBOpenDBRequest;
-    console.error('DB 오픈 실패:', target.error);
+    throw new Error(`DB 오픈 실패: ${target.error}`);
   };
 
   request.onsuccess = () => {
@@ -52,12 +53,6 @@ export const addToDB = (todo: TODO) => {
     const transaction = db.transaction(['TODO'], 'readwrite');
     const store = transaction.objectStore('TODO');
     store.add(todo);
-    request.onsuccess = e => {
-      const target = e.target as IDBRequest | null;
-      if (target) {
-        console.log(target.result);
-      }
-    };
   };
 };
 
