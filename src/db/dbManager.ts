@@ -23,6 +23,15 @@ export const createDB = () => {
 
       todoStore.createIndex('title', 'title', { unique: false });
       todoStore.createIndex('content', 'content', { unique: false });
+    } else {
+      const todoStore = db.transaction('TODO', 'readwrite').objectStore('TODO');
+
+      if (!todoStore.indexNames.contains('title')) {
+        todoStore.createIndex('title', 'title', { unique: false });
+      }
+      if (!todoStore.indexNames.contains('content')) {
+        todoStore.createIndex('content', 'content', { unique: false });
+      }
     }
   };
 
