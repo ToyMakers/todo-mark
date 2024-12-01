@@ -1,9 +1,6 @@
-import { createDB } from '../db/dbManager';
 import TodoList from './TodoList';
 
 function Popup() {
-  createDB();
-
   return (
     <div className="p-2">
       <div className="w-80 h-10">
