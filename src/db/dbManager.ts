@@ -23,8 +23,6 @@ export const createDB = () => {
 
       todoStore.createIndex('title', 'title', { unique: false });
       todoStore.createIndex('content', 'content', { unique: false });
-      todoStore.createIndex('dueDate', 'dueDate', { unique: false });
-      todoStore.createIndex('isComplete', 'isComplete', { unique: false });
     }
   };
 
