@@ -1,0 +1,46 @@
+name: release
+
+on:
+  push:
+    branches:
+      - master
+      - set-cd-release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+
+      - name: dependencies 설치
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Zip dist folder
+        run: zip -r dist.zip dist/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: todomark.zip
+
+      - name: Upload release
+        uses: actions/upload-artifact@v3
+        with:
+          name: todomark
+          path: todomark.zip
