@@ -7,40 +7,18 @@ on:
       - set-cd-release
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20]
-
     steps:
-      - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Github의 최신 tag 받아오기
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-          cache-dependency-path: 'pnpm-lock.yaml'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: dependencies 설치
-        run: pnpm install
-
-      - name: Build
-        run: pnpm build
-
-      - name: Zip dist folder
-        run: zip -r dist.zip dist/
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - name: release 업데이트
+        uses: ncipollo/release-action@v1
         with:
-          files: todomark.zip
-
-      - name: Upload release
-        uses: actions/upload-artifact@v3
-        with:
-          name: todomark
-          path: todomark.zip
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
