@@ -17,7 +17,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: release 업데이트
-        id: release_update
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
@@ -26,6 +25,6 @@ jobs:
 
       - name: 결과 출력
         run: |
-          echo "tag: ${{ steps.release_update.outputs.tag }}"
-          echo "release_id: ${{ steps.release_update.outputs.name }}"
-          echo "release_url: ${{ steps.release_update.outputs.url }}"
+          echo "New tag: ${{ steps.tag_version.outputs.new_tag }}"
+          echo "New version: ${{ steps.tag_version.outputs.new_version }}"
+          echo "Changelog: ${{ steps.tag_version.outputs.changelog }}"
