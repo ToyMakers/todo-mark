@@ -16,13 +16,16 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 브랜치 이름 제거
-        id: sanitize_tag
-        run: echo "::set-output name=sanitized_tag::$(echo '${{ steps.tag_version.outputs.new_tag }}' | sed -E 's/-.*//')"
-
       - name: release 업데이트
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.sanitize_tag.outputs.sanitized_tag }}
-          name: Release ${{ steps.sanitize_tag.outputs.sanitized_tag }}
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+
+      - name: Print new tag, new version, and previous tag
+        run: |
+          echo "New Tag: ${{ steps.tag_version.outputs.new_tag }}"
+          echo "New Version: ${{ steps.tag_version.outputs.new_version }}"
+          echo "Previous Tag: ${{ steps.tag_version.outputs.previous_tag }}"
+          echo "Changelog: ${{ steps.tag_version.outputs.changelog }}"
