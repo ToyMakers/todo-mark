@@ -25,7 +25,5 @@ jobs:
 
       - name: Print new tag, new version, and previous tag
         run: |
-          echo "New Tag: ${{ steps.tag_version.outputs.new_tag }}"
-          echo "New Version: ${{ steps.tag_version.outputs.new_version }}"
-          echo "Previous Tag: ${{ steps.tag_version.outputs.previous_tag }}"
-          echo "Changelog: ${{ steps.tag_version.outputs.changelog }}"
+          echo "New tag: ${{ steps.tag_version.outputs.new_tag }}"
+          echo "New version: ${{ steps.tag_version.outputs.new_version }}"
