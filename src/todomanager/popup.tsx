@@ -1,6 +1,6 @@
-// import { useState } from 'react';
-// import TodoList from './todo';
+import { useState } from 'react';
 import Detail from './detail';
+import TodoList from './TodoList';
 
 // interface Todo {
 //   id: string;
@@ -9,15 +9,20 @@ import Detail from './detail';
 // }
 
 function Popup() {
-  // const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
+  const [selectedId, setSelectedId] = useState('');
+
+  const handleSelectTodo = (id: string) => {
+    setSelectedId(id);
+  };
 
   return (
     <div>
       <div className="w-32 h-10">
         <h1>투두막</h1>
       </div>
-      <Detail />
-      {/* {selectedTodo ? <Detail /> : <TodoList />} */}
+      <TodoList onSelectTodo={handleSelectTodo} />
+
+      <Detail id={selectedId} />
     </div>
   );
 }
