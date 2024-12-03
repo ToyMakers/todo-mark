@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { createDB, addToDB, getAllTodos } from '../db/dbManager';
+import { addToDB, getAllTodos } from '../db/dbManager';
 
 interface Todo {
   id: string;
@@ -11,7 +11,6 @@ interface Todo {
 }
 
 function Popup() {
-  createDB();
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [editTodo, setEditTodo] = useState<{
