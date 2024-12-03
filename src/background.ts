@@ -1,1 +1,3 @@
-console.log('Background script is running!');
+import { createDB } from './db/dbManager';
+
+createDB();
