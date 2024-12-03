@@ -10,9 +10,11 @@ import TodoList from './TodoList';
 
 function Popup() {
   const [selectedId, setSelectedId] = useState('');
+  const [currentView, setCurrentView] = useState('list');
 
-  const handleSelectTodo = (id: string) => {
+  const handleSelectTodo = (id: string, view: string) => {
     setSelectedId(id);
+    setCurrentView(view);
   };
 
   return (
@@ -20,9 +22,8 @@ function Popup() {
       <div className="w-32 h-10">
         <h1>투두막</h1>
       </div>
-      <TodoList onSelectTodo={handleSelectTodo} />
-
-      <Detail id={selectedId} />
+      {currentView === 'list' && <TodoList onSelectTodo={handleSelectTodo} />}
+      {currentView === 'detail' && <Detail id={selectedId} />}
     </div>
   );
 }

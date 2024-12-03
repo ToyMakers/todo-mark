@@ -7,7 +7,7 @@ interface TodoListProps {
 }
 
 interface TodoListProps {
-  onSelectTodo: (id: string) => void;
+  onSelectTodo: (id: string, view: string) => void;
 }
 
 function TodoList({ onSelectTodo }: TodoListProps) {
