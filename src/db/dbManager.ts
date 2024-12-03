@@ -85,3 +85,25 @@ export const getAllTodos = (): Promise<Todo[]> => {
     };
   });
 };
+
+export const getTodobyId = (id: string): Promise<TODO> => {
+  return new Promise((resolve, reject) => {
+    const request = window.indexedDB.open(DB_NAME);
+
+    request.onsuccess = e => {
+      const db = (e.target as IDBOpenDBRequest).result;
+      const transaction = db.transaction(['TODO'], 'readonly');
+      const store = transaction.objectStore('TODO');
+      const getRequest = store.get(id);
+
+      getRequest.onsuccess = () => {
+        const result = getRequest.result as TODO;
+        resolve(result);
+      };
+
+      getRequest.onerror = () => {
+        reject(new Error('데이터 읽기 실패'));
+      };
+    };
+  });
+};
