@@ -11,11 +11,9 @@ interface TodoListProps {
 }
 
 function TodoList({ onSelectTodo }: TodoListProps) {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [editTodo, setEditTodo] = useState<Todo | null>(null);
-
-  const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
 
   const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodoContent = e.target.value;
