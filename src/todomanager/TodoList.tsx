@@ -10,7 +10,11 @@ interface Todo {
   isComplete: boolean;
 }
 
-function TodoList() {
+interface TodoListProps {
+  onSelectTodo: (id: string) => void;
+}
+
+function TodoList({ onSelectTodo }: TodoListProps) {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [editTodo, setEditTodo] = useState<{
@@ -119,9 +123,13 @@ function TodoList() {
                   className="border rounded px-1"
                 />
               ) : (
-                <div className="w-40 text-left break-words whitespace-normal">
+                <button
+                  type="button"
+                  onClick={() => onSelectTodo(todo.id)}
+                  className="w-40 text-left break-words whitespace-normal"
+                >
                   {todo.content}
-                </div>
+                </button>
               )}
 
               <div className="flex items-center gap-2">
