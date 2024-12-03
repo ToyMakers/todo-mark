@@ -1,25 +1,31 @@
 import { useEffect, useState } from 'react';
 import { getTodobyId } from '../db/dbManager';
 
-// interface Todo {
-//   id: string;
-//   title: string;
-//   dueDate?: string;
-//   isComplete: boolean;
-//   todoDetail: TodoDetail;
-// }
+interface Todo {
+  id: string;
+  title: string;
+  dueDate?: string;
+  isComplete: boolean;
+  todoDetail: TodoDetail;
+}
 
-// interface TodoDetail {
-//   description: string;
-// }
+interface TodoDetail {
+  description: string;
+}
 
 function Detail({ id }: { id: string }) {
   const [isModify, setIsModify] = useState(false);
-  // const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  const [selectedTodo, setSelectedTodo] = useState<Todo>();
 
   useEffect(() => {
-    console.log(getTodobyId(id));
-  }, []);
+    const fetchTodo = async () => {
+      const result = (await getTodobyId(id)) as Todo;
+      console.log(result);
+      setSelectedTodo(result);
+    };
+
+    fetchTodo();
+  }, [id]);
 
   const handleIsModify = () => {
     setIsModify(!isModify);
@@ -31,7 +37,7 @@ function Detail({ id }: { id: string }) {
         <div className="flex justify-center items-center space-y-2 w-full">
           {!isModify ? (
             <div className="flex justify-around items-center space-x-2 w-full">
-              <div className="text-lg">투두 제목 보이기[예시]</div>
+              <div className="text-lg">{selectedTodo?.title}</div>
               <div className="text-sm text-gray-600">D-13[예시]</div>
               <input
                 type="checkbox"

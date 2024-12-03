@@ -86,7 +86,7 @@ export const getAllTodos = (): Promise<Todo[]> => {
   });
 };
 
-export const getTodobyId = (id: string): Promise<TODO> => {
+export const getTodobyId = (id: string) => {
   return new Promise((resolve, reject) => {
     const request = window.indexedDB.open(DB_NAME);
 
