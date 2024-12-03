@@ -6,6 +6,7 @@ interface TODO {
   isComplete: boolean;
 }
 const DB_NAME = 'TODO_DB';
+const STORE_NAME = 'TODO';
 
 export const createDB = () => {
   if (!window.indexedDB) {
@@ -18,13 +19,15 @@ export const createDB = () => {
     const target = e.target as IDBOpenDBRequest;
     const db = target.result;
 
-    if (!db.objectStoreNames.contains('TODO')) {
-      const todoStore = db.createObjectStore('TODO', { keyPath: 'id' });
+    if (!db.objectStoreNames.contains(STORE_NAME)) {
+      const todoStore = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
 
       todoStore.createIndex('title', 'title', { unique: false });
       todoStore.createIndex('content', 'content', { unique: false });
     } else {
-      const todoStore = db.transaction('TODO', 'readwrite').objectStore('TODO');
+      const todoStore = db
+        .transaction(STORE_NAME, 'readwrite')
+        .objectStore(STORE_NAME);
 
       if (!todoStore.indexNames.contains('title')) {
         todoStore.createIndex('title', 'title', { unique: false });
@@ -57,8 +60,8 @@ export const addToDB = (todo: TODO) => {
 
   request.onsuccess = () => {
     const db = request.result;
-    const transaction = db.transaction(['TODO'], 'readwrite');
-    const store = transaction.objectStore('TODO');
+    const transaction = db.transaction([STORE_NAME], 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
     store.add(todo);
   };
 };
@@ -69,8 +72,8 @@ export const getAllTodos = (): Promise<TODO[]> => {
 
     request.onsuccess = e => {
       const db = (e.target as IDBOpenDBRequest).result;
-      const transaction = db.transaction(['TODO'], 'readonly');
-      const store = transaction.objectStore('TODO');
+      const transaction = db.transaction([STORE_NAME], 'readonly');
+      const store = transaction.objectStore(STORE_NAME);
       const getAllRequest = store.getAll();
 
       getAllRequest.onsuccess = () => {
