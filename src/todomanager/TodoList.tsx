@@ -11,7 +11,7 @@ interface Todo {
 }
 
 interface TodoListProps {
-  onSelectTodo: (id: string) => void;
+  onSelectTodo: (id: string, view: string) => void;
 }
 
 function TodoList({ onSelectTodo }: TodoListProps) {
@@ -125,7 +125,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
               ) : (
                 <button
                   type="button"
-                  onClick={() => onSelectTodo(todo.id)}
+                  onClick={() => onSelectTodo(todo.id, 'detail')}
                   className="w-40 text-left break-words whitespace-normal"
                 >
                   {todo.content}
