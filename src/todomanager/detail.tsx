@@ -13,14 +13,13 @@ interface TodoDetail {
   description: string;
 }
 
-function Detail({ id }: { id: string }) {
+function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   const [isModify, setIsModify] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
 
   useEffect(() => {
     const fetchTodo = async () => {
       const result = (await getTodobyId(id)) as Todo;
-      console.log(result);
       setSelectedTodo(result);
     };
 
@@ -34,6 +33,13 @@ function Detail({ id }: { id: string }) {
   return (
     <div className="flex flex-col p-4 space-y-4">
       <section className="flex justify-between items-center w-full">
+        <button
+          type="button"
+          onClick={onBack}
+          className="bg-brown-500 text-white rounded px-4 py-2 hover:bg-brown-600"
+        >
+          목록
+        </button>
         <div className="flex justify-center items-center space-y-2 w-full">
           {!isModify ? (
             <div className="flex justify-around items-center space-x-2 w-full">
