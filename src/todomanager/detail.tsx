@@ -1,7 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getTodobyId } from '../db/dbManager';
 
-function Detail() {
+// interface Todo {
+//   id: string;
+//   title: string;
+//   dueDate?: string;
+//   isComplete: boolean;
+//   todoDetail: TodoDetail;
+// }
+
+// interface TodoDetail {
+//   description: string;
+// }
+
+function Detail({ id }: { id: string }) {
   const [isModify, setIsModify] = useState(false);
+  // const [selectedTodo, setSelectedTodo] = useState<Todo>();
+
+  useEffect(() => {
+    console.log(getTodobyId(id));
+  }, []);
 
   const handleIsModify = () => {
     setIsModify(!isModify);
