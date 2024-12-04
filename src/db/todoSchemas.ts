@@ -1,7 +1,7 @@
 export interface Todo {
   id: string;
   title: string;
-  dueDate?: string;
+  dueDate?: Date;
   isComplete: boolean;
   todoDetail: TodoDetail;
 }
