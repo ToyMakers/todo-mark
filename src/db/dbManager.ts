@@ -107,3 +107,45 @@ export const getTodobyId = (id: string) => {
     };
   });
 };
+
+export const updateTodo = (todo: Todo) => {
+  return new Promise((resolve, reject) => {
+    const request = window.indexedDB.open(DB.NAME);
+
+    request.onsuccess = e => {
+      const db = (e.target as IDBOpenDBRequest).result;
+      const transaction = db.transaction([DB.STORE_NAME], 'readwrite');
+      const store = transaction.objectStore(DB.STORE_NAME);
+      const updateRequest = store.put(todo);
+
+      updateRequest.onsuccess = () => {
+        resolve('데이터 수정 성공');
+      };
+
+      updateRequest.onerror = () => {
+        reject(new Error('데이터 수정 실패'));
+      };
+    };
+  });
+};
+
+export const deleteTodo = (id: string) => {
+  return new Promise((resolve, reject) => {
+    const request = window.indexedDB.open(DB.NAME);
+
+    request.onsuccess = e => {
+      const db = (e.target as IDBOpenDBRequest).result;
+      const transaction = db.transaction([DB.STORE_NAME], 'readwrite');
+      const store = transaction.objectStore(DB.STORE_NAME);
+      const deleteRequest = store.delete(id);
+
+      deleteRequest.onsuccess = () => {
+        resolve('데이터 삭제 성공');
+      };
+
+      deleteRequest.onerror = () => {
+        reject(new Error('데이터 삭제 실패'));
+      };
+    };
+  });
+};
