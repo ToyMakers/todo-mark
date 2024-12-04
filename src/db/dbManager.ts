@@ -47,7 +47,7 @@ export const createDB = () => {
   };
 };
 
-export const addToDB = (todo: Todo) => {
+export const addTodo = (todo: Todo) => {
   const request = window.indexedDB.open(DB_NAME);
 
   request.onerror = e => {

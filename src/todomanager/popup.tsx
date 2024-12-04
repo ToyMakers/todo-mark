@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { addToDB, getAllTodos } from '../db/dbManager';
+import { addTodo, getAllTodos } from '../db/dbManager';
 import { Todo } from '../todoSchemas';
 
 function Popup() {
@@ -48,7 +48,7 @@ function Popup() {
         },
       };
       setTodos(prevTodos => [...prevTodos, newTodoItem]);
-      addToDB(newTodoItem);
+      addTodo(newTodoItem);
       setNewTodo('');
     }
   };
