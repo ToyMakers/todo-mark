@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
-import { getTodobyId } from '../db/dbManager';
+import { getTodobyId, updateTodo } from '../db/dbManager';
 import { Todo } from '../db/todoSchemas';
 
 function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   const [isModify, setIsModify] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
-  // const [title, setTitle] = useState('');
-  // const [dueDate, setDueDate] = useState();
-  // const [isComplete, setIsComplete] = useState(false);
-  // const [description, setDescription] = useState('');
 
   useEffect(() => {
     const fetchTodo = async () => {
@@ -23,21 +19,32 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     setIsModify(!isModify);
   };
 
-  // const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setTitle(e.target.value);
-  // };
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target as HTMLInputElement | HTMLTextAreaElement;
+    // const { checked } = e.target as HTMLInputElement;
 
-  // const handleDueDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setDueDate(e.target.value);
-  // };
-
-  // const handleIsComplete = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setIsComplete(e.target.checked);
-  // };
-
-  // const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-  //   setDescription(e.target.value);
-  // };
+    if (selectedTodo) {
+      setSelectedTodo(prevTodo => {
+        if (!prevTodo) return prevTodo;
+        if (name !== 'description') {
+          return {
+            ...prevTodo,
+            [name]: value,
+          };
+        }
+        return {
+          ...prevTodo,
+          todoDetail: {
+            ...prevTodo.todoDetail,
+            [name]: value,
+          },
+        };
+      });
+      updateTodo(selectedTodo);
+    }
+  };
 
   return (
     <div className="flex flex-col p-4 space-y-4">
@@ -54,29 +61,42 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
             <div className="flex justify-around items-center space-x-2 w-full">
               <div className="text-lg">{selectedTodo?.title}</div>
               <div className="text-sm text-gray-600">
-                {selectedTodo?.dueDate}
+                {selectedTodo?.dueDate?.toLocaleDateString()}
               </div>
               <input
                 type="checkbox"
+                name="isComplete"
+                checked={selectedTodo?.isComplete}
+                onChange={handleInputChange}
                 className="w-5 h-5 items-center align-middle custom-checkbox"
               />
             </div>
           ) : (
-            <div className="flex justify-around items-center space-x-2 w-full">
-              <input
-                type="text"
-                defaultValue={selectedTodo?.title}
-                className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-40"
-              />
+            <div className="flex-col justify-around items-center space-x-2 w-full">
+              <div className="felx">
+                <input
+                  type="text"
+                  name="title"
+                  value={selectedTodo?.title}
+                  onChange={handleInputChange}
+                  defaultValue={selectedTodo?.title}
+                  className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-40"
+                />
+                <input
+                  type="checkbox"
+                  name="isComplete"
+                  onChange={handleInputChange}
+                  checked={selectedTodo?.isComplete}
+                  className="w-5 h-5 items-center align-middle custom-checkbox"
+                />
+              </div>
               <input
                 type="date"
-                defaultValue={selectedTodo?.dueDate}
+                name="dueDate"
+                value={selectedTodo?.dueDate?.toString()}
+                onChange={handleInputChange}
+                defaultValue={selectedTodo?.dueDate?.toString()}
                 className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-28 "
-              />
-              <input
-                type="checkbox"
-                checked={selectedTodo?.isComplete}
-                className="w-5 h-5 items-center align-middle custom-checkbox"
               />
             </div>
           )}
@@ -85,6 +105,7 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
       <section>
         {!isModify ? (
           <>
+            <div>{selectedTodo?.todoDetail.description}</div>
             <div className="h-32" />
             <button
               type="button"
@@ -98,6 +119,9 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
           <>
             <textarea
               className="w-full h-32 p-2 border border-brown-400 rounded resize-none focus:ring-2 focus:ring-brown-400 focus:outline-none"
+              value={selectedTodo?.todoDetail.description}
+              name="description"
+              onChange={handleInputChange}
               defaultValue={selectedTodo?.todoDetail.description}
             />
             <button
