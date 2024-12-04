@@ -6,10 +6,6 @@ interface TodoListProps {
   onSelectTodo: (id: string, view: string) => void;
 }
 
-interface TodoListProps {
-  onSelectTodo: (id: string, view: string) => void;
-}
-
 function TodoList({ onSelectTodo }: TodoListProps) {
   const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
