@@ -1,25 +1,19 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { addToDB, getAllTodos } from '../db/dbManager';
-
-interface Todo {
-  id: string;
-  title: string;
-  content: string;
-  dueDate?: Date;
-  isComplete: boolean;
-}
+import { addTodo, getAllTodos } from '../db/dbManager';
+import { Todo } from '../db/todoSchemas';
 
 interface TodoListProps {
   onSelectTodo: (id: string, view: string) => void;
 }
 
 function TodoList({ onSelectTodo }: TodoListProps) {
+  // [FIX ME] 데이터 베이스 저장소의 삭제, 수정 기능이 구현되면 todos를 사용하지 않고 todoFromDB를 사용해야 합니다.
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [editTodo, setEditTodo] = useState<{
     id: string;
-    content: string;
+    title: string;
   } | null>(null);
 
   const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
@@ -29,21 +23,25 @@ function TodoList({ onSelectTodo }: TodoListProps) {
     setNewTodo(newTodoContent);
   };
 
-  const getTodosFromDB = async () => {
+  const fetchTodosFromDB = async () => {
     const todoList = await getAllTodos();
+    return todoList;
+  };
+
+  const saveTodosFromDB = async () => {
+    const todoList = await fetchTodosFromDB();
     setTodoFromDB(
       todoList.map(todo => ({
         id: todo.id,
-        title: todo.title || '',
-        content: todo.content || '',
-        dueDate: todo.dueDate ? new Date(todo.dueDate) : undefined,
+        title: todo.title,
+        dueDate: todo.dueDate,
         isComplete: todo.isComplete,
+        todoDetail: todo.todoDetail,
       })),
     );
   };
-
-  const fetchTodos = async () => {
-    await getTodosFromDB();
+  const loadTodos = async () => {
+    await saveTodosFromDB();
   };
 
   const handleAddTodo = () => {
@@ -51,12 +49,14 @@ function TodoList({ onSelectTodo }: TodoListProps) {
       const newTodoItem = {
         id: uuidv4(),
         title: newTodo,
-        content: newTodo,
         dueDate: undefined,
         isComplete: false,
+        todoDetail: {
+          description: '',
+        },
       };
       setTodos(prevTodos => [...prevTodos, newTodoItem]);
-      addToDB(newTodoItem);
+      addTodo(newTodoItem);
       setNewTodo('');
     }
   };
@@ -76,20 +76,18 @@ function TodoList({ onSelectTodo }: TodoListProps) {
 
   const handleEditTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (editTodo) {
-      setEditTodo({ ...editTodo, content: e.target.value });
+      setEditTodo({ ...editTodo, title: e.target.value });
     }
   };
   const handleStartEditTodo = (todo: Todo) => {
-    setEditTodo({ id: todo.id, content: todo.content });
+    setEditTodo({ id: todo.id, title: todo.title });
   };
 
   const handleSaveEditTodo = () => {
     if (editTodo) {
       setTodos(
         todos.map(todo =>
-          todo.id === editTodo.id
-            ? { ...todo, content: editTodo.content }
-            : todo,
+          todo.id === editTodo.id ? { ...todo, title: editTodo.title } : todo,
         ),
       );
       setEditTodo(null);
@@ -97,7 +95,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
   };
 
   useEffect(() => {
-    fetchTodos();
+    loadTodos();
   }, [todoFromDB]);
 
   return (
@@ -118,7 +116,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
               {editTodo?.id === todo.id ? (
                 <input
                   type="text"
-                  value={editTodo.content}
+                  value={editTodo.title}
                   onChange={handleEditTodo}
                   className="border rounded px-1"
                 />
@@ -128,7 +126,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
                   onClick={() => onSelectTodo(todo.id, 'detail')}
                   className="w-40 text-left break-words whitespace-normal"
                 >
-                  {todo.content}
+                  {todo.title}
                 </button>
               )}
 
