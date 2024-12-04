@@ -18,7 +18,9 @@ export const createDB = () => {
       const todoStore = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
 
       todoStore.createIndex('title', 'title', { unique: false });
-      todoStore.createIndex('content', 'content', { unique: false });
+      todoStore.createIndex('description', 'todoDetail.description', {
+        unique: false,
+      });
     } else {
       const todoStore = db
         .transaction(STORE_NAME, 'readwrite')
@@ -27,8 +29,8 @@ export const createDB = () => {
       if (!todoStore.indexNames.contains('title')) {
         todoStore.createIndex('title', 'title', { unique: false });
       }
-      if (!todoStore.indexNames.contains('content')) {
-        todoStore.createIndex('content', 'content', { unique: false });
+      if (!todoStore.indexNames.contains('description')) {
+        todoStore.createIndex('description', 'description', { unique: false });
       }
     }
   };
