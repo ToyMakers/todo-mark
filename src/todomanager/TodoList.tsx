@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { addTodo, getAllTodos } from '../db/dbManager';
+import { addTodo, getAllTodos, deleteTodo, updateTodo } from '../db/dbManager';
 import { Todo } from '../db/todoSchemas';
 
 interface TodoListProps {
@@ -9,7 +9,6 @@ interface TodoListProps {
 
 function TodoList({ onSelectTodo }: TodoListProps) {
   // [FIX ME] 데이터 베이스 저장소의 삭제, 수정 기능이 구현되면 todos를 사용하지 않고 todoFromDB를 사용해야 합니다.
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [editTodo, setEditTodo] = useState<{
     id: string;
@@ -55,7 +54,6 @@ function TodoList({ onSelectTodo }: TodoListProps) {
           description: '',
         },
       };
-      setTodos(prevTodos => [...prevTodos, newTodoItem]);
       addTodo(newTodoItem);
       setNewTodo('');
     }
@@ -63,15 +61,20 @@ function TodoList({ onSelectTodo }: TodoListProps) {
 
   const handleCompleteTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.value;
-    setTodos(
-      todos.map(todo =>
-        todo.id === id ? { ...todo, isComplete: !todo.isComplete } : todo,
-      ),
-    );
+    todoFromDB.forEach(todo => {
+      if (todo.id === id) {
+        updateTodo({
+          id,
+          isComplete: e.target.checked,
+          title: todo.title,
+          todoDetail: todo.todoDetail,
+        });
+      }
+    });
   };
 
   const handleDeleteTodo = (id: string) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    deleteTodo(id);
   };
 
   const handleEditTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,11 +88,12 @@ function TodoList({ onSelectTodo }: TodoListProps) {
 
   const handleSaveEditTodo = () => {
     if (editTodo) {
-      setTodos(
-        todos.map(todo =>
-          todo.id === editTodo.id ? { ...todo, title: editTodo.title } : todo,
-        ),
-      );
+      updateTodo({
+        id: editTodo.id,
+        title: editTodo.title,
+        isComplete: false,
+        todoDetail: { description: '' },
+      });
       setEditTodo(null);
     }
   };
