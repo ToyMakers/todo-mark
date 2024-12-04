@@ -1,10 +1,5 @@
-interface TODO {
-  id: string;
-  title?: string;
-  content?: string;
-  dueDate?: string;
-  isComplete: boolean;
-}
+import { Todo } from '../todoSchemas';
+
 const DB_NAME = 'TODO_DB';
 const STORE_NAME = 'TODO';
 
@@ -50,7 +45,7 @@ export const createDB = () => {
   };
 };
 
-export const addToDB = (todo: TODO) => {
+export const addToDB = (todo: Todo) => {
   const request = window.indexedDB.open(DB_NAME);
 
   request.onerror = e => {
@@ -66,7 +61,7 @@ export const addToDB = (todo: TODO) => {
   };
 };
 
-export const getAllTodos = (): Promise<TODO[]> => {
+export const getAllTodos = (): Promise<Todo[]> => {
   return new Promise((resolve, reject) => {
     const request = window.indexedDB.open(DB_NAME);
 
@@ -77,7 +72,7 @@ export const getAllTodos = (): Promise<TODO[]> => {
       const getAllRequest = store.getAll();
 
       getAllRequest.onsuccess = () => {
-        const result = getAllRequest.result as Array<TODO>;
+        const result = getAllRequest.result as Array<Todo>;
         resolve(result);
       };
 
