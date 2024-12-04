@@ -1,21 +1,18 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { addTodo, getAllTodos, deleteTodo, updateTodo } from '../db/dbManager';
-import { Todo } from '../db/todoSchemas';
 
 interface TodoListProps {
   onSelectTodo: (id: string, view: string) => void;
 }
 
 function TodoList({ onSelectTodo }: TodoListProps) {
-  // [FIX ME] 데이터 베이스 저장소의 삭제, 수정 기능이 구현되면 todos를 사용하지 않고 todoFromDB를 사용해야 합니다.
+  const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [editTodo, setEditTodo] = useState<{
     id: string;
     title: string;
   } | null>(null);
-
-  const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
 
   const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodoContent = e.target.value;
