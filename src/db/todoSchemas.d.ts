@@ -1,4 +1,4 @@
-export interface Todo {
+interface Todo {
   id: string;
   title: string;
   dueDate?: Date;
@@ -6,6 +6,6 @@ export interface Todo {
   todoDetail: TodoDetail;
 }
 
-export interface TodoDetail {
+interface TodoDetail {
   description: string;
 }

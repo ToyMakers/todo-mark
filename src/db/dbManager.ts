@@ -1,4 +1,3 @@
-import { Todo } from './todoSchemas';
 import DB from '../constants/constants';
 
 export const createDB = () => {
