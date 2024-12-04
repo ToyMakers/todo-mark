@@ -24,7 +24,7 @@ function Popup() {
     setTodoFromDB(
       todoList.map(todo => ({
         id: todo.id,
-        title: todo.title || '',
+        title: todo.title,
         dueDate: todo.dueDate,
         isComplete: todo.isComplete,
         todoDetail: todo.todoDetail,
@@ -41,7 +41,6 @@ function Popup() {
       const newTodoItem = {
         id: uuidv4(),
         title: newTodo,
-        content: newTodo,
         dueDate: undefined,
         isComplete: false,
         todoDetail: {
