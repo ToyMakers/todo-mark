@@ -23,7 +23,6 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target as HTMLInputElement | HTMLTextAreaElement;
-    // const { checked } = e.target as HTMLInputElement;
 
     if (selectedTodo) {
       setSelectedTodo(prevTodo => {
