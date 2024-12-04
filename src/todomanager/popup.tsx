@@ -36,9 +36,6 @@ function Popup() {
       })),
     );
   };
-  const loadTodos = async () => {
-    await saveTodosFromDB();
-  };
 
   const handleAddTodo = () => {
     if (typeof newTodo === 'string' && newTodo.length > 0) {
@@ -91,7 +88,7 @@ function Popup() {
   };
 
   useEffect(() => {
-    loadTodos();
+    saveTodosFromDB();
   }, [todoFromDB]);
 
   return (
