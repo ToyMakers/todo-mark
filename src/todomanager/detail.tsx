@@ -1,21 +1,14 @@
 import { useEffect, useState } from 'react';
 import { getTodobyId } from '../db/dbManager';
-
-interface Todo {
-  id: string;
-  title: string;
-  dueDate?: string;
-  isComplete: boolean;
-  todoDetail: TodoDetail;
-}
-
-interface TodoDetail {
-  description: string;
-}
+import { Todo } from '../db/todoSchemas';
 
 function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   const [isModify, setIsModify] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  // const [title, setTitle] = useState('');
+  // const [dueDate, setDueDate] = useState();
+  // const [isComplete, setIsComplete] = useState(false);
+  // const [description, setDescription] = useState('');
 
   useEffect(() => {
     const fetchTodo = async () => {
@@ -29,6 +22,22 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   const handleIsModify = () => {
     setIsModify(!isModify);
   };
+
+  // const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setTitle(e.target.value);
+  // };
+
+  // const handleDueDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setDueDate(e.target.value);
+  // };
+
+  // const handleIsComplete = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setIsComplete(e.target.checked);
+  // };
+
+  // const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setDescription(e.target.value);
+  // };
 
   return (
     <div className="flex flex-col p-4 space-y-4">
@@ -44,7 +53,9 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
           {!isModify ? (
             <div className="flex justify-around items-center space-x-2 w-full">
               <div className="text-lg">{selectedTodo?.title}</div>
-              <div className="text-sm text-gray-600">D-13[예시]</div>
+              <div className="text-sm text-gray-600">
+                {selectedTodo?.dueDate}
+              </div>
               <input
                 type="checkbox"
                 className="w-5 h-5 items-center align-middle custom-checkbox"
@@ -54,15 +65,17 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
             <div className="flex justify-around items-center space-x-2 w-full">
               <input
                 type="text"
-                defaultValue="투두 제목 보이기"
+                defaultValue={selectedTodo?.title}
                 className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-40"
               />
               <input
                 type="date"
+                defaultValue={selectedTodo?.dueDate}
                 className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-28 "
               />
               <input
                 type="checkbox"
+                checked={selectedTodo?.isComplete}
                 className="w-5 h-5 items-center align-middle custom-checkbox"
               />
             </div>
@@ -85,7 +98,7 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
           <>
             <textarea
               className="w-full h-32 p-2 border border-brown-400 rounded resize-none focus:ring-2 focus:ring-brown-400 focus:outline-none"
-              defaultValue="세부 내용"
+              defaultValue={selectedTodo?.todoDetail.description}
             />
             <button
               type="button"
