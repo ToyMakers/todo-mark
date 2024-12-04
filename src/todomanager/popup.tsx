@@ -19,8 +19,13 @@ function Popup() {
     setNewTodo(newTodoContent);
   };
 
-  const getTodosFromDB = async () => {
+  const fetchTodosFromDB = async () => {
     const todoList = await getAllTodos();
+    return todoList;
+  };
+
+  const saveTodosFromDB = async () => {
+    const todoList = await fetchTodosFromDB();
     setTodoFromDB(
       todoList.map(todo => ({
         id: todo.id,
@@ -31,9 +36,8 @@ function Popup() {
       })),
     );
   };
-
-  const fetchTodos = async () => {
-    await getTodosFromDB();
+  const loadTodos = async () => {
+    await saveTodosFromDB();
   };
 
   const handleAddTodo = () => {
@@ -87,7 +91,7 @@ function Popup() {
   };
 
   useEffect(() => {
-    fetchTodos();
+    loadTodos();
   }, [todoFromDB]);
 
   return (
