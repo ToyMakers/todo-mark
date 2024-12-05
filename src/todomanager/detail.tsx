@@ -18,6 +18,16 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     setIsModify(!isModify);
   };
 
+  const calculateDday = (dueDate: Date) => {
+    const result = Math.ceil(
+      (dueDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
+    );
+    if (result < 0) {
+      return `D+${Math.abs(result)}`;
+    }
+    return `D-${result}`;
+  };
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -34,6 +44,12 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
           };
         }
         if (name !== 'description') {
+          if (name === 'dueDate') {
+            return {
+              ...prevTodo,
+              [name]: new Date(value),
+            };
+          }
           return {
             ...prevTodo,
             [name]: value,
@@ -69,7 +85,9 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
             <div className="flex justify-around items-center space-x-2 w-full">
               <div className="text-lg">{selectedTodo?.title}</div>
               <div className="text-sm text-gray-600">
-                {selectedTodo?.dueDate?.toLocaleDateString()}
+                {selectedTodo?.dueDate && (
+                  <div>{calculateDday(selectedTodo?.dueDate)}</div>
+                )}
               </div>
               <input
                 type="checkbox"
@@ -101,9 +119,11 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
               <input
                 type="date"
                 name="dueDate"
-                value={selectedTodo?.dueDate?.toString()}
+                value={selectedTodo?.dueDate?.toISOString().split('T')[0]}
                 onChange={handleInputChange}
-                defaultValue={selectedTodo?.dueDate?.toString()}
+                defaultValue={
+                  selectedTodo?.dueDate?.toISOString().split('T')[0]
+                }
                 className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-28 "
               />
             </div>
