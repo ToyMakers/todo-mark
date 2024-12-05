@@ -81,7 +81,7 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
             </div>
           ) : (
             <div className="flex-col justify-around items-center space-x-2 w-full">
-              <div className="felx">
+              <div className="flex">
                 <input
                   type="text"
                   name="title"
