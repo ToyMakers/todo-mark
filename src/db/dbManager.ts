@@ -85,3 +85,8 @@ export const getAllTodos = (): Promise<Todo[]> => {
     };
   });
 };
+
+export const fetchTodosFromDB = async () => {
+  const todoList = await getAllTodos();
+  return todoList;
+};

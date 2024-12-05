@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { addTodo, getAllTodos } from '../db/dbManager';
+import { addTodo, fetchTodosFromDB } from '../db/dbManager';
 
 function Popup() {
   // [FIX ME] 데이터 베이스 저장소의 삭제, 수정 기능이 구현되면 todos를 사용하지 않고 todoFromDB를 사용해야 합니다.
@@ -16,11 +16,6 @@ function Popup() {
   const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodoContent = e.target.value;
     setNewTodo(newTodoContent);
-  };
-
-  const fetchTodosFromDB = async () => {
-    const todoList = await getAllTodos();
-    return todoList;
   };
 
   const saveTodosFromDB = async () => {
