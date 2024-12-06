@@ -9,10 +9,7 @@ interface TodoListProps {
 function TodoList({ onSelectTodo }: TodoListProps) {
   // [FIX ME] 데이터 베이스 저장소의 삭제, 수정 기능이 구현되면 todos를 사용하지 않고 todoFromDB를 사용해야 합니다.
   const [newTodo, setNewTodo] = useState('');
-  const [editTodo, setEditTodo] = useState<{
-    id: string;
-    title: string;
-  } | null>(null);
+  const [editTodo, setEditTodo] = useState<Todo | null>(null);
 
   const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
 
@@ -77,16 +74,14 @@ function TodoList({ onSelectTodo }: TodoListProps) {
     }
   };
   const handleStartEditTodo = (todo: Todo) => {
-    setEditTodo({ id: todo.id, title: todo.title });
+    setEditTodo({ ...todo });
   };
 
   const handleSaveEditTodo = () => {
     if (editTodo) {
       updateTodo({
-        id: editTodo.id,
+        ...editTodo,
         title: editTodo.title,
-        isComplete: false,
-        todoDetail: { description: '' },
       });
       setEditTodo(null);
     }
