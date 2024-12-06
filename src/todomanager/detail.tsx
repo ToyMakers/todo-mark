@@ -14,10 +14,6 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     fetchTodo();
   }, [id]);
 
-  const handleIsModify = () => {
-    setIsModify(!isModify);
-  };
-
   const calculateDday = (dueDate: Date) => {
     const result = Math.ceil(
       (dueDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
@@ -26,6 +22,10 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
       return `D+${Math.abs(result)}`;
     }
     return `D-${result}`;
+  };
+
+  const handleIsModify = () => {
+    setIsModify(!isModify);
   };
 
   const handleInputChange = (
