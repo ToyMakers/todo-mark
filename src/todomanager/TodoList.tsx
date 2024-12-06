@@ -9,10 +9,7 @@ interface TodoListProps {
 function TodoList({ onSelectTodo }: TodoListProps) {
   const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
-  const [editTodo, setEditTodo] = useState<{
-    id: string;
-    title: string;
-  } | null>(null);
+  const [editTodo, setEditTodo] = useState<Todo | null>(null);
 
   const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodoContent = e.target.value;
@@ -80,16 +77,14 @@ function TodoList({ onSelectTodo }: TodoListProps) {
     }
   };
   const handleStartEditTodo = (todo: Todo) => {
-    setEditTodo({ id: todo.id, title: todo.title });
+    setEditTodo({ ...todo });
   };
 
   const handleSaveEditTodo = () => {
     if (editTodo) {
       updateTodo({
-        id: editTodo.id,
+        ...editTodo,
         title: editTodo.title,
-        isComplete: false,
-        todoDetail: { description: '' },
       });
       setEditTodo(null);
     }
