@@ -38,31 +38,31 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     if (selectedTodo) {
       setSelectedTodo(prevTodo => {
         if (!prevTodo) return prevTodo;
-        if (name === 'isComplete') {
-          return {
-            ...prevTodo,
-            isComplete: checked,
-          };
-        }
-        if (name !== 'description') {
-          if (name === 'dueDate') {
+        switch (name) {
+          case 'isComplete':
             return {
               ...prevTodo,
-              [name]: new Date(value),
+              isComplete: checked,
             };
-          }
-          return {
-            ...prevTodo,
-            [name]: value,
-          };
+          case 'description':
+            return {
+              ...prevTodo,
+              todoDetail: {
+                ...prevTodo.todoDetail,
+                [name]: value,
+              },
+            };
+          case 'dueDate':
+            return {
+              ...prevTodo,
+              dueDate: new Date(value),
+            };
+          default:
+            return {
+              ...prevTodo,
+              [name]: value,
+            };
         }
-        return {
-          ...prevTodo,
-          todoDetail: {
-            ...prevTodo.todoDetail,
-            [name]: value,
-          },
-        };
       });
       updateTodo({
         ...selectedTodo,
