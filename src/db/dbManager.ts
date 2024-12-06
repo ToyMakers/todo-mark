@@ -88,7 +88,7 @@ export const getAllTodos = (): Promise<Todo[]> => {
 
 export const getTodobyId = (id: string) => {
   return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open(DB_NAME);
+    const request = window.indexedDB.open(DB.NAME);
 
     request.onsuccess = e => {
       const db = (e.target as IDBOpenDBRequest).result;
@@ -97,7 +97,7 @@ export const getTodobyId = (id: string) => {
       const getRequest = store.get(id);
 
       getRequest.onsuccess = () => {
-        const result = getRequest.result as TODO;
+        const result = getRequest.result as Todo;
         resolve(result);
       };
 
