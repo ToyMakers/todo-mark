@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getTodobyId, updateTodo } from '../db/dbManager';
-import { Todo } from '../db/todoSchemas';
 
 function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   const [isModify, setIsModify] = useState(false);
