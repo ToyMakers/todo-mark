@@ -16,21 +16,25 @@ function TodoList({ onSelectTodo }: TodoListProps) {
     setNewTodo(newTodoContent);
   };
 
-  const getTodosFromDB = async () => {
+  const fetchTodosFromDB = async () => {
     const todoList = await getAllTodos();
+    return todoList;
+  };
+
+  const saveTodosFromDB = async () => {
+    const todoList = await fetchTodosFromDB();
     setTodoFromDB(
       todoList.map(todo => ({
         id: todo.id,
-        title: todo.title || '',
-        dueDate: todo.dueDate ? new Date(todo.dueDate) : undefined,
+        title: todo.title,
+        dueDate: todo.dueDate,
         isComplete: todo.isComplete,
         todoDetail: todo.todoDetail,
       })),
     );
   };
-
-  const fetchTodos = async () => {
-    await getTodosFromDB();
+  const loadTodos = async () => {
+    await saveTodosFromDB();
   };
 
   const handleAddTodo = () => {
@@ -38,10 +42,11 @@ function TodoList({ onSelectTodo }: TodoListProps) {
       const newTodoItem = {
         id: uuidv4(),
         title: newTodo,
-        content: newTodo,
         dueDate: undefined,
         isComplete: false,
-        todoDetail: { description: '' },
+        todoDetail: {
+          description: '',
+        },
       };
       addTodo(newTodoItem);
       setNewTodo('');
@@ -86,7 +91,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
   };
 
   useEffect(() => {
-    fetchTodos();
+    loadTodos();
   }, [todoFromDB]);
 
   return (
