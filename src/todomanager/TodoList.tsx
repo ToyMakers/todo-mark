@@ -38,7 +38,6 @@ function TodoList({ onSelectTodo }: TodoListProps) {
       const newTodoItem = {
         id: uuidv4(),
         title: newTodo,
-        content: newTodo,
         dueDate: undefined,
         isComplete: false,
         todoDetail: { description: '' },
@@ -53,10 +52,8 @@ function TodoList({ onSelectTodo }: TodoListProps) {
     todoFromDB.forEach(todo => {
       if (todo.id === id) {
         updateTodo({
-          id,
+          ...todo,
           isComplete: e.target.checked,
-          title: todo.title,
-          todoDetail: todo.todoDetail,
         });
       }
     });
