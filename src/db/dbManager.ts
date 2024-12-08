@@ -85,3 +85,67 @@ export const getAllTodos = (): Promise<Todo[]> => {
     };
   });
 };
+
+export const getTodobyId = (id: string) => {
+  return new Promise((resolve, reject) => {
+    const request = window.indexedDB.open(DB.NAME);
+
+    request.onsuccess = e => {
+      const db = (e.target as IDBOpenDBRequest).result;
+      const transaction = db.transaction(['TODO'], 'readonly');
+      const store = transaction.objectStore('TODO');
+      const getRequest = store.get(id);
+
+      getRequest.onsuccess = () => {
+        const result = getRequest.result as Todo;
+        resolve(result);
+      };
+
+      getRequest.onerror = () => {
+        reject(new Error('데이터 읽기 실패'));
+      };
+    };
+  });
+};
+
+export const updateTodo = (todo: Todo) => {
+  return new Promise((resolve, reject) => {
+    const request = window.indexedDB.open(DB.NAME);
+
+    request.onsuccess = e => {
+      const db = (e.target as IDBOpenDBRequest).result;
+      const transaction = db.transaction([DB.STORE_NAME], 'readwrite');
+      const store = transaction.objectStore(DB.STORE_NAME);
+      const updateRequest = store.put(todo);
+
+      updateRequest.onsuccess = () => {
+        resolve('데이터 수정 성공');
+      };
+
+      updateRequest.onerror = () => {
+        reject(new Error('데이터 수정 실패'));
+      };
+    };
+  });
+};
+
+export const deleteTodo = (id: string) => {
+  return new Promise((resolve, reject) => {
+    const request = window.indexedDB.open(DB.NAME);
+
+    request.onsuccess = e => {
+      const db = (e.target as IDBOpenDBRequest).result;
+      const transaction = db.transaction([DB.STORE_NAME], 'readwrite');
+      const store = transaction.objectStore(DB.STORE_NAME);
+      const deleteRequest = store.delete(id);
+
+      deleteRequest.onsuccess = () => {
+        resolve('데이터 삭제 성공');
+      };
+
+      deleteRequest.onerror = () => {
+        reject(new Error('데이터 삭제 실패'));
+      };
+    };
+  });
+};
