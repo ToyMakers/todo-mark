@@ -21,7 +21,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
     setTodoFromDB(
       todoList.map(todo => ({
         id: todo.id,
-        title: todo.title || '',
+        title: todo.title,
         dueDate: todo.dueDate ? new Date(todo.dueDate) : undefined,
         isComplete: todo.isComplete,
         todoDetail: todo.todoDetail,
