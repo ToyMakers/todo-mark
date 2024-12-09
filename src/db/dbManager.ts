@@ -92,8 +92,8 @@ export const getTodobyId = (id: string) => {
 
     request.onsuccess = e => {
       const db = (e.target as IDBOpenDBRequest).result;
-      const transaction = db.transaction(['TODO'], 'readonly');
-      const store = transaction.objectStore('TODO');
+      const transaction = db.transaction([DB.STORE_NAME], 'readonly');
+      const store = transaction.objectStore(DB.STORE_NAME);
       const getRequest = store.get(id);
 
       getRequest.onsuccess = () => {
