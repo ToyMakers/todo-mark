@@ -7,7 +7,7 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
 
   useEffect(() => {
     const fetchTodo = async () => {
-      const result = (await getTodobyId(id)) as Todo;
+      const result = await getTodobyId(id);
       setSelectedTodo(result);
     };
 
