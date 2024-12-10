@@ -64,14 +64,19 @@ function TodoList({ onSelectTodo }: TodoListProps) {
       setEditTodo({ ...editTodo, title: e.target.value });
     }
   };
-  const handleStartEditTodo = (todo: Todo) => {
-    setEditTodo({ ...todo });
+
+  const handleStartEditTodo = (id: string) => {
+    const editTodoItem = todoFromDB.find(todo => todo.id === id);
+    if (editTodoItem) {
+      setEditTodo({ ...editTodoItem });
+    }
   };
 
-  const handleSaveEditTodo = () => {
-    if (editTodo) {
+  const handleSaveEditTodo = (id: string) => {
+    const saveTodo = todoFromDB.find(todo => todo.id === id);
+    if (saveTodo && editTodo) {
       updateTodo({
-        ...editTodo,
+        ...saveTodo,
         title: editTodo.title,
       });
       setEditTodo(null);
@@ -118,7 +123,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
                 {editTodo?.id === todo.id ? (
                   <button
                     type="button"
-                    onClick={handleSaveEditTodo}
+                    onClick={() => handleSaveEditTodo(editTodo.id)}
                     className="text-green-500"
                   >
                     저장
@@ -126,7 +131,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => handleStartEditTodo(todo)}
+                    onClick={() => handleStartEditTodo(todo.id)}
                     className="text-blue-500"
                   >
                     수정
