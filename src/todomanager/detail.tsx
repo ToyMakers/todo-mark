@@ -28,11 +28,8 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     setIsModify(!isModify);
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target as HTMLInputElement | HTMLTextAreaElement;
-    const { checked } = e.target as HTMLInputElement;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, checked } = e.target as HTMLInputElement;
 
     if (selectedTodo) {
       setSelectedTodo(prevTodo => {
@@ -42,14 +39,6 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
             return {
               ...prevTodo,
               isComplete: checked,
-            };
-          case 'description':
-            return {
-              ...prevTodo,
-              todoDetail: {
-                ...prevTodo.todoDetail,
-                [name]: value,
-              },
             };
           case 'dueDate':
             return {
@@ -66,6 +55,30 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
       updateTodo({
         ...selectedTodo,
         [name]: name === 'isComplete' ? checked : value,
+      });
+    }
+  };
+
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target as HTMLTextAreaElement;
+
+    if (selectedTodo) {
+      setSelectedTodo(prevTodo => {
+        if (!prevTodo) return prevTodo;
+        return {
+          ...prevTodo,
+          todoDetail: {
+            ...prevTodo.todoDetail,
+            [name]: value,
+          },
+        };
+      });
+      updateTodo({
+        ...selectedTodo,
+        todoDetail: {
+          ...selectedTodo.todoDetail,
+          [name]: value,
+        },
       });
     }
   };
@@ -149,7 +162,7 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
               className="w-full h-32 p-2 border border-brown-400 rounded resize-none focus:ring-2 focus:ring-brown-400 focus:outline-none"
               value={selectedTodo?.todoDetail.description}
               name="description"
-              onChange={handleInputChange}
+              onChange={handleTextAreaChange}
               defaultValue={selectedTodo?.todoDetail.description}
             />
             <button
