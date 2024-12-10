@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "todomark",
+  "version": "1.0.1",
+  "description": "markdown todolist",
+  "action": {
+    "default_title": "todomark",
+    "default_popup": "index.html"
+  },
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "dist/background.js"
+  }
+}
