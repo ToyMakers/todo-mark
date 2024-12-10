@@ -44,20 +44,28 @@ export const createDB = () => {
   };
 };
 
-export const addTodo = (todo: Todo) => {
-  const request = window.indexedDB.open(DB.NAME);
+export const addTodo = (todo: Todo): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const request = window.indexedDB.open(DB.NAME);
 
-  request.onerror = e => {
-    const target = e.target as IDBOpenDBRequest;
-    throw new Error(`DB 오픈 실패: ${target.error}`);
-  };
+    request.onsuccess = () => {
+      const db = request.result;
+      const transaction = db.transaction([DB.STORE_NAME], 'readwrite');
+      const store = transaction.objectStore(DB.STORE_NAME);
+      const addRequest = store.add(todo);
 
-  request.onsuccess = () => {
-    const db = request.result;
-    const transaction = db.transaction([DB.STORE_NAME], 'readwrite');
-    const store = transaction.objectStore(DB.STORE_NAME);
-    store.add(todo);
-  };
+      addRequest.onsuccess = () => {
+        resolve();
+      };
+
+      addRequest.onerror = () => {
+        reject(new Error('데이터 추가 실패'));
+      };
+    };
+    request.onerror = () => {
+      reject(new Error('DB 연결 실패'));
+    };
+  });
 };
 
 export const getAllTodos = (): Promise<Todo[]> => {
@@ -105,10 +113,13 @@ export const getTodobyId = (id: string): Promise<Todo> => {
         reject(new Error('데이터 읽기 실패'));
       };
     };
+    request.onerror = () => {
+      reject(new Error('DB 연결 실패'));
+    };
   });
 };
 
-export const updateTodo = (todo: Todo) => {
+export const updateTodo = (todo: Todo): Promise<void> => {
   return new Promise((resolve, reject) => {
     const request = window.indexedDB.open(DB.NAME);
 
@@ -119,17 +130,20 @@ export const updateTodo = (todo: Todo) => {
       const updateRequest = store.put(todo);
 
       updateRequest.onsuccess = () => {
-        resolve('데이터 수정 성공');
+        resolve();
       };
 
       updateRequest.onerror = () => {
         reject(new Error('데이터 수정 실패'));
       };
     };
+    request.onerror = () => {
+      reject(new Error('DB 연결 실패'));
+    };
   });
 };
 
-export const deleteTodo = (id: string) => {
+export const deleteTodo = (id: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     const request = window.indexedDB.open(DB.NAME);
 
@@ -140,12 +154,15 @@ export const deleteTodo = (id: string) => {
       const deleteRequest = store.delete(id);
 
       deleteRequest.onsuccess = () => {
-        resolve('데이터 삭제 성공');
+        resolve();
       };
 
       deleteRequest.onerror = () => {
         reject(new Error('데이터 삭제 실패'));
       };
+    };
+    request.onerror = () => {
+      reject(new Error('DB 연결 실패'));
     };
   });
 };
