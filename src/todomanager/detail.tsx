@@ -29,7 +29,7 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, checked } = e.target as HTMLInputElement;
+    const { name, value, checked } = e.target;
 
     if (selectedTodo) {
       setSelectedTodo(prevTodo => {
@@ -60,7 +60,7 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   };
 
   const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = e.target as HTMLTextAreaElement;
+    const { name, value } = e.target;
 
     if (selectedTodo) {
       setSelectedTodo(prevTodo => {
