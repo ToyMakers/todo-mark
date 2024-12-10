@@ -17,9 +17,9 @@ function TodoList({ onSelectTodo }: TodoListProps) {
   };
 
   const getTodosFromDB = async () => {
-    const todoList = await getAllTodos();
+    const todos = await getAllTodos();
     setTodoFromDB(
-      todoList.map(todo => ({
+      todos.map(todo => ({
         id: todo.id,
         title: todo.title,
         dueDate: todo.dueDate ? new Date(todo.dueDate) : undefined,
@@ -27,10 +27,6 @@ function TodoList({ onSelectTodo }: TodoListProps) {
         todoDetail: todo.todoDetail,
       })),
     );
-  };
-
-  const fetchTodos = async () => {
-    await getTodosFromDB();
   };
 
   const handleAddTodo = () => {
@@ -83,7 +79,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
   };
 
   useEffect(() => {
-    fetchTodos();
+    getTodosFromDB();
   }, [todoFromDB]);
 
   return (
