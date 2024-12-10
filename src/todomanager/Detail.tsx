@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import ReactMarkDown from 'react-markdown';
+import 'github-markdown-css/github-markdown-light.css';
+import remarkGfm from 'remark-gfm';
 import { getTodobyId, updateTodo } from '../db/dbManager';
 
 function Detail({ id, onBack }: { id: string; onBack: () => void }) {
@@ -146,7 +149,14 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
       <section>
         {!isModify ? (
           <>
-            <div>{selectedTodo?.todoDetail.description}</div>
+            <div>
+              <ReactMarkDown
+                className="markdown-body"
+                remarkPlugins={[remarkGfm]}
+              >
+                {selectedTodo?.todoDetail.description}
+              </ReactMarkDown>
+            </div>
             <div className="h-32" />
             <button
               type="button"
