@@ -109,7 +109,6 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
                   name="title"
                   value={selectedTodo?.title}
                   onChange={handleInputChange}
-                  defaultValue={selectedTodo?.title}
                   className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-40"
                 />
                 <input
@@ -125,9 +124,6 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
                 name="dueDate"
                 value={selectedTodo?.dueDate?.toISOString().split('T')[0]}
                 onChange={handleInputChange}
-                defaultValue={
-                  selectedTodo?.dueDate?.toISOString().split('T')[0]
-                }
                 className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-28 "
               />
             </div>
@@ -154,7 +150,6 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
               value={selectedTodo?.todoDetail.description}
               name="description"
               onChange={handleTextAreaChange}
-              defaultValue={selectedTodo?.todoDetail.description}
             />
             <button
               type="button"
