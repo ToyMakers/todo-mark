@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getTodobyId, updateTodo } from '../db/dbManager';
+import calculateDday from '../utils/utils';
 
 function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   const [isModify, setIsModify] = useState(false);
@@ -8,16 +9,6 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   const fetchTodo = async () => {
     const result = await getTodobyId(id);
     setSelectedTodo(result);
-  };
-
-  const calculateDday = (dueDate: Date) => {
-    const result = Math.ceil(
-      (dueDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
-    );
-    if (result < 0) {
-      return `D+${Math.abs(result)}`;
-    }
-    return `D-${result}`;
   };
 
   const handleIsModify = () => {
