@@ -5,14 +5,10 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   const [isModify, setIsModify] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
 
-  useEffect(() => {
-    const fetchTodo = async () => {
-      const result = await getTodobyId(id);
-      setSelectedTodo(result);
-    };
-
-    fetchTodo();
-  }, [id]);
+  const fetchTodo = async () => {
+    const result = await getTodobyId(id);
+    setSelectedTodo(result);
+  };
 
   const calculateDday = (dueDate: Date) => {
     const result = Math.ceil(
@@ -82,6 +78,10 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
       });
     }
   };
+
+  useEffect(() => {
+    fetchTodo();
+  }, [id]);
 
   return (
     <div className="flex flex-col p-4 space-y-4">
