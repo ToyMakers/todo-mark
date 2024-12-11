@@ -44,125 +44,62 @@ export const createDB = () => {
   };
 };
 
-export const addTodo = (todo: Todo): Promise<void> => {
+export const withIndexedDB = <Type>(
+  storeName: string,
+  mode: IDBTransactionMode,
+  callback: (store: IDBObjectStore) => IDBRequest<Type> | void,
+): Promise<Type | void> => {
   return new Promise((resolve, reject) => {
     const request = window.indexedDB.open(DB.NAME);
 
-    request.onsuccess = () => {
-      const db = request.result;
-      const transaction = db.transaction([DB.STORE_NAME], 'readwrite');
-      const store = transaction.objectStore(DB.STORE_NAME);
-      const addRequest = store.add(todo);
+    request.onsuccess = e => {
+      const db = (e.target as IDBOpenDBRequest).result;
+      const transaction = db.transaction([storeName], mode);
+      const store = transaction.objectStore(storeName);
+      const result = callback(store);
 
-      addRequest.onsuccess = () => {
-        resolve();
-      };
-
-      addRequest.onerror = () => {
-        reject(new Error('데이터 추가 실패'));
-      };
+      if (result instanceof IDBRequest) {
+        result.onsuccess = () => {
+          resolve(result.result);
+        };
+      } else {
+        transaction.oncomplete = () => {
+          resolve();
+        };
+      }
     };
     request.onerror = () => {
       reject(new Error('DB 연결 실패'));
     };
+  });
+};
+
+export const addTodo = (todo: Todo): Promise<void> => {
+  return withIndexedDB<void>(DB.STORE_NAME, 'readwrite', store => {
+    store.add(todo);
   });
 };
 
 export const getAllTodos = (): Promise<Todo[]> => {
-  return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open(DB.NAME);
-
-    request.onsuccess = e => {
-      const db = (e.target as IDBOpenDBRequest).result;
-      const transaction = db.transaction([DB.STORE_NAME], 'readonly');
-      const store = transaction.objectStore(DB.STORE_NAME);
-      const getAllRequest = store.getAll();
-
-      getAllRequest.onsuccess = () => {
-        const result = getAllRequest.result as Array<Todo>;
-        resolve(result);
-      };
-
-      getAllRequest.onerror = () => {
-        reject(new Error('데이터 읽기 실패'));
-      };
-    };
-
-    request.onerror = () => {
-      reject(new Error('DB 연결 실패'));
-    };
-  });
+  return withIndexedDB<Todo[]>(DB.STORE_NAME, 'readonly', store => {
+    return store.getAll();
+  }) as Promise<Todo[]>;
 };
 
 export const getTodobyId = (id: string): Promise<Todo> => {
-  return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open(DB.NAME);
-
-    request.onsuccess = e => {
-      const db = (e.target as IDBOpenDBRequest).result;
-      const transaction = db.transaction([DB.STORE_NAME], 'readonly');
-      const store = transaction.objectStore(DB.STORE_NAME);
-      const getRequest = store.get(id);
-
-      getRequest.onsuccess = () => {
-        const result = getRequest.result as Todo;
-        resolve(result);
-      };
-
-      getRequest.onerror = () => {
-        reject(new Error('데이터 읽기 실패'));
-      };
-    };
-    request.onerror = () => {
-      reject(new Error('DB 연결 실패'));
-    };
-  });
+  return withIndexedDB<Todo>(DB.STORE_NAME, 'readonly', store => {
+    return store.get(id);
+  }) as Promise<Todo>;
 };
 
 export const updateTodo = (todo: Todo): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open(DB.NAME);
-
-    request.onsuccess = e => {
-      const db = (e.target as IDBOpenDBRequest).result;
-      const transaction = db.transaction([DB.STORE_NAME], 'readwrite');
-      const store = transaction.objectStore(DB.STORE_NAME);
-      const updateRequest = store.put(todo);
-
-      updateRequest.onsuccess = () => {
-        resolve();
-      };
-
-      updateRequest.onerror = () => {
-        reject(new Error('데이터 수정 실패'));
-      };
-    };
-    request.onerror = () => {
-      reject(new Error('DB 연결 실패'));
-    };
+  return withIndexedDB<void>(DB.STORE_NAME, 'readwrite', store => {
+    store.put(todo);
   });
 };
 
 export const deleteTodo = (id: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open(DB.NAME);
-
-    request.onsuccess = e => {
-      const db = (e.target as IDBOpenDBRequest).result;
-      const transaction = db.transaction([DB.STORE_NAME], 'readwrite');
-      const store = transaction.objectStore(DB.STORE_NAME);
-      const deleteRequest = store.delete(id);
-
-      deleteRequest.onsuccess = () => {
-        resolve();
-      };
-
-      deleteRequest.onerror = () => {
-        reject(new Error('데이터 삭제 실패'));
-      };
-    };
-    request.onerror = () => {
-      reject(new Error('DB 연결 실패'));
-    };
+  return withIndexedDB<void>(DB.STORE_NAME, 'readwrite', store => {
+    store.delete(id);
   });
 };

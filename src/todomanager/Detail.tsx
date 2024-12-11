@@ -3,28 +3,15 @@ import ReactMarkDown from 'react-markdown';
 import 'github-markdown-css/github-markdown-light.css';
 import remarkGfm from 'remark-gfm';
 import { getTodobyId, updateTodo } from '../db/dbManager';
+import calculateDday from '../utils/utils';
 
 function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   const [isModify, setIsModify] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
 
-  useEffect(() => {
-    const fetchTodo = async () => {
-      const result = await getTodobyId(id);
-      setSelectedTodo(result);
-    };
-
-    fetchTodo();
-  }, [id]);
-
-  const calculateDday = (dueDate: Date) => {
-    const result = Math.ceil(
-      (dueDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24),
-    );
-    if (result < 0) {
-      return `D+${Math.abs(result)}`;
-    }
-    return `D-${result}`;
+  const fetchTodo = async () => {
+    const result = await getTodobyId(id);
+    setSelectedTodo(result);
   };
 
   const handleIsModify = () => {
@@ -86,6 +73,10 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     }
   };
 
+  useEffect(() => {
+    fetchTodo();
+  }, [id]);
+
   return (
     <div className="flex flex-col p-4 space-y-4">
       <section className="flex justify-between items-center w-full">
@@ -121,7 +112,6 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
                   name="title"
                   value={selectedTodo?.title}
                   onChange={handleInputChange}
-                  defaultValue={selectedTodo?.title}
                   className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-40"
                 />
                 <input
@@ -137,9 +127,6 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
                 name="dueDate"
                 value={selectedTodo?.dueDate?.toISOString().split('T')[0]}
                 onChange={handleInputChange}
-                defaultValue={
-                  selectedTodo?.dueDate?.toISOString().split('T')[0]
-                }
                 className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-28 "
               />
             </div>
@@ -173,7 +160,6 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
               value={selectedTodo?.todoDetail.description}
               name="description"
               onChange={handleTextAreaChange}
-              defaultValue={selectedTodo?.todoDetail.description}
             />
             <button
               type="button"
