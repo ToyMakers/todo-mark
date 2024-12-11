@@ -1,30 +1,28 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { addTodo, getAllTodos } from '../db/dbManager';
+import { addTodo, getAllTodos, deleteTodo, updateTodo } from '../db/dbManager';
 
-function Popup() {
-  // [FIX ME] 데이터 베이스 저장소의 삭제, 수정 기능이 구현되면 todos를 사용하지 않고 todoFromDB를 사용해야 합니다.
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodo, setNewTodo] = useState('');
-  const [editTodo, setEditTodo] = useState<{
-    id: string;
-    title: string;
-  } | null>(null);
+interface TodoListProps {
+  onSelectTodo: (id: string, view: string) => void;
+}
 
+function TodoList({ onSelectTodo }: TodoListProps) {
   const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
+  const [newTodo, setNewTodo] = useState('');
+  const [editTodo, setEditTodo] = useState<Todo | null>(null);
 
   const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodoContent = e.target.value;
     setNewTodo(newTodoContent);
   };
 
-  const saveTodosFromDB = async () => {
-    const todoList = await getAllTodos();
+  const getTodosFromDB = async () => {
+    const todos = await getAllTodos();
     setTodoFromDB(
-      todoList.map(todo => ({
+      todos.map(todo => ({
         id: todo.id,
         title: todo.title,
-        dueDate: todo.dueDate,
+        dueDate: todo.dueDate ? new Date(todo.dueDate) : undefined,
         isComplete: todo.isComplete,
         todoDetail: todo.todoDetail,
       })),
@@ -38,11 +36,8 @@ function Popup() {
         title: newTodo,
         dueDate: undefined,
         isComplete: false,
-        todoDetail: {
-          description: '',
-        },
+        todoDetail: { description: '' },
       };
-      setTodos(prevTodos => [...prevTodos, newTodoItem]);
       addTodo(newTodoItem);
       setNewTodo('');
     }
@@ -50,15 +45,18 @@ function Popup() {
 
   const handleCompleteTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.value;
-    setTodos(
-      todos.map(todo =>
-        todo.id === id ? { ...todo, isComplete: !todo.isComplete } : todo,
-      ),
-    );
+    todoFromDB.forEach(todo => {
+      if (todo.id === id) {
+        updateTodo({
+          ...todo,
+          isComplete: e.target.checked,
+        });
+      }
+    });
   };
 
   const handleDeleteTodo = (id: string) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+    deleteTodo(id);
   };
 
   const handleEditTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,23 +64,27 @@ function Popup() {
       setEditTodo({ ...editTodo, title: e.target.value });
     }
   };
-  const handleStartEditTodo = (todo: Todo) => {
-    setEditTodo({ id: todo.id, title: todo.title });
+
+  const handleStartEditTodo = (id: string) => {
+    const editTodoItem = todoFromDB.find(todo => todo.id === id);
+    if (editTodoItem) {
+      setEditTodo({ ...editTodoItem });
+    }
   };
 
-  const handleSaveEditTodo = () => {
-    if (editTodo) {
-      setTodos(
-        todos.map(todo =>
-          todo.id === editTodo.id ? { ...todo, title: editTodo.title } : todo,
-        ),
-      );
+  const handleSaveEditTodo = (id: string) => {
+    const saveTodo = todoFromDB.find(todo => todo.id === id);
+    if (saveTodo && editTodo) {
+      updateTodo({
+        ...saveTodo,
+        title: editTodo.title,
+      });
       setEditTodo(null);
     }
   };
 
   useEffect(() => {
-    saveTodosFromDB();
+    getTodosFromDB();
   }, [todoFromDB]);
 
   return (
@@ -108,16 +110,20 @@ function Popup() {
                   className="border rounded px-1"
                 />
               ) : (
-                <div className="w-40 text-left break-words whitespace-normal">
+                <button
+                  type="button"
+                  onClick={() => onSelectTodo(todo.id, 'detail')}
+                  className="w-40 text-left break-words whitespace-normal"
+                >
                   {todo.title}
-                </div>
+                </button>
               )}
 
               <div className="flex items-center gap-2">
                 {editTodo?.id === todo.id ? (
                   <button
                     type="button"
-                    onClick={handleSaveEditTodo}
+                    onClick={() => handleSaveEditTodo(editTodo.id)}
                     className="text-green-500"
                   >
                     저장
@@ -125,7 +131,7 @@ function Popup() {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => handleStartEditTodo(todo)}
+                    onClick={() => handleStartEditTodo(todo.id)}
                     className="text-blue-500"
                   >
                     수정
@@ -159,4 +165,4 @@ function Popup() {
   );
 }
 
-export default Popup;
+export default TodoList;
