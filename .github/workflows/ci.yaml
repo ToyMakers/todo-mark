@@ -35,10 +35,7 @@ jobs:
       - name: 전체 소스 코드와 빌드 파일 복사
         run: |
           mkdir full-project
-          cp -r dist full-project/dist
           cp -r * full-project/
-          rm -rf full-project/node_modules
-          rm -rf full-project/.git
 
       - name: 복사한 아티팩트 업로드
         uses: actions/upload-artifact@v4
