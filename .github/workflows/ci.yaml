@@ -31,3 +31,17 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: 전체 소스 코드와 빌드 파일 복사
+        run: |
+          mkdir todomark
+          cp -r dist todomark/dist
+          cp -r * todomark/
+          rm -rf todomark/node_modules
+          rm -rf todomark/.git
+
+      - name: 복사한 아티팩트 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: todomark-with-build
+          path: todomark/
