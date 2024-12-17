@@ -13,15 +13,6 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: release/
-
       - name: Github의 최신 tag 받아오기
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
@@ -31,13 +22,13 @@ jobs:
       - name: 빌드 파일을 포함한 전체 소스 코드 다운로드
         uses: actions/download-artifact@v4
         with:
-          name: full-project-with-build
+          name: TodoMark
           path: release/
 
       - name: 다운로드한 파일 압축
         run: |
           cd release
-          zip -r ../full_project_with_build.zip .
+          zip -r ../TodoMark.zip .
 
       - name: release 업데이트 및 파일 업로드
         uses: ncipollo/release-action@v1
