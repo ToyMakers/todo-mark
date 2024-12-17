@@ -4,20 +4,46 @@ on:
   push:
     branches:
       - master
+  workflow_run:
+    workflows: ['ci']
+    types:
+      - completed
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: release/
+
       - name: Github의 최신 tag 받아오기
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: release 업데이트
+      - name: 빌드 파일을 포함한 전체 소스 코드 다운로드
+        uses: actions/download-artifact@v4
+        with:
+          name: todomark-with-build
+          path: release/
+
+      - name: 다운로드한 파일 압축
+        run: |
+          cd release
+          zip -r ../todomark_with_build.zip .
+
+      - name: release 업데이트 및 파일 업로드
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+          artifacts: 'TodoMark.zip'
+          token: ${{ secrets.GITHUB_TOKEN }}
