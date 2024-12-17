@@ -32,13 +32,8 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: 전체 소스 코드와 빌드 파일 복사
-        run: |
-          mkdir -p full-project
-          cp -r . full-project
-
-      - name: 복사한 아티팩트 업로드
+      - name: 빌드 폴더 포함한 전체 코드 업로드
         uses: actions/upload-artifact@v4
         with:
-          name: full-project-with-build
-          path: full-project/
+          name: full-project
+          path: .
