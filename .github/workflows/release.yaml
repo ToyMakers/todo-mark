@@ -31,13 +31,13 @@ jobs:
       - name: 빌드 파일을 포함한 전체 소스 코드 다운로드
         uses: actions/download-artifact@v4
         with:
-          name: todomark-with-build
+          name: full-project-with-build
           path: release/
 
       - name: 다운로드한 파일 압축
         run: |
           cd release
-          zip -r ../todomark_with_build.zip .
+          zip -r ../full_project_with_build.zip .
 
       - name: release 업데이트 및 파일 업로드
         uses: ncipollo/release-action@v1
