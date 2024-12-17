@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+  workflow_run:
+    workflows: ['ci']
+    types:
+      - completed
 
 jobs:
   release:
@@ -15,9 +19,22 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: release 업데이트
+      - name: 빌드 파일을 포함한 전체 소스 코드 다운로드
+        uses: actions/download-artifact@v4
+        with:
+          name: TodoMark
+          path: release/
+
+      - name: 다운로드한 파일 압축
+        run: |
+          cd release
+          zip -r ../TodoMark.zip .
+
+      - name: release 업데이트 및 파일 업로드
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+          artifacts: 'TodoMark.zip'
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -31,3 +31,9 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: 빌드 폴더 포함한 전체 코드 업로드
+        uses: actions/upload-artifact@v4
+        with:
+          name: TodoMark
+          path: .
