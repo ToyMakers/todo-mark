@@ -8,6 +8,7 @@ import calculateDday from '../utils/utils';
 function Detail({ id, onBack }: { id: string; onBack: () => void }) {
   const [isModify, setIsModify] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo>();
+  const [isImportant, setIsImportant] = useState(false);
 
   const fetchTodo = async () => {
     const result = await getTodobyId(id);
@@ -73,6 +74,10 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     }
   };
 
+  const handleImportant = () => {
+    setIsImportant(!isImportant);
+  };
+
   useEffect(() => {
     fetchTodo();
   }, [id]);
@@ -91,6 +96,28 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
           {!isModify ? (
             <div className="flex justify-around items-center space-x-2 w-full">
               <div className="text-lg">{selectedTodo?.title}</div>
+              {!isImportant ? (
+                <div className="flex items-center gap-2 h-transparent">
+                  <button
+                    type="button"
+                    className="border-none outline-none bg-transparent text-center"
+                    onClick={handleImportant}
+                  >
+                    ☆
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 h-transparent">
+                  <button
+                    type="button"
+                    className="border-none outline-none bg-transparent text-center"
+                    onClick={handleImportant}
+                  >
+                    ★
+                  </button>
+                </div>
+              )}
+
               <div className="text-sm text-gray-600">
                 {selectedTodo?.dueDate && (
                   <div>{calculateDday(selectedTodo?.dueDate)}</div>
@@ -114,6 +141,27 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
                   onChange={handleInputChange}
                   className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-40"
                 />
+                {!isImportant ? (
+                  <div className="flex items-center gap-2 h-transparent">
+                    <button
+                      type="button"
+                      className="border-none outline-none bg-transparent text-center"
+                      onClick={handleImportant}
+                    >
+                      ☆
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 h-transparent">
+                    <button
+                      type="button"
+                      className="border-none outline-none bg-transparent text-center"
+                      onClick={handleImportant}
+                    >
+                      ★
+                    </button>
+                  </div>
+                )}
                 <input
                   type="checkbox"
                   name="isComplete"
