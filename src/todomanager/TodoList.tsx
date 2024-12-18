@@ -10,6 +10,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
   const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [editTodo, setEditTodo] = useState<Todo | null>(null);
+  const [isImportant, setIsImportant] = useState(false);
 
   const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodoContent = e.target.value;
@@ -83,6 +84,10 @@ function TodoList({ onSelectTodo }: TodoListProps) {
     }
   };
 
+  const handleImportant = () => {
+    setIsImportant(!isImportant);
+  };
+
   useEffect(() => {
     getTodosFromDB();
   }, [todoFromDB]);
@@ -117,6 +122,28 @@ function TodoList({ onSelectTodo }: TodoListProps) {
                 >
                   {todo.title}
                 </button>
+              )}
+
+              {!isImportant ? (
+                <div className="flex items-center gap-2 h-transparent">
+                  <button
+                    type="button"
+                    className="border-none outline-none bg-transparent text-center"
+                    onClick={handleImportant}
+                  >
+                    ☆
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 h-transparent">
+                  <button
+                    type="button"
+                    className="border-none outline-none bg-transparent text-center"
+                    onClick={handleImportant}
+                  >
+                    ★
+                  </button>
+                </div>
               )}
 
               <div className="flex items-center gap-2">
