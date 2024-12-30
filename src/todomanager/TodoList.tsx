@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { addTodo, getAllTodos, deleteTodo, updateTodo } from '../db/dbManager';
+import {
+  addTodo,
+  getAllTodos,
+  deleteTodo,
+  updateTodo,
+  updateImportance,
+} from '../db/dbManager';
 
 interface TodoListProps {
   onSelectTodo: (id: string, view: string) => void;
@@ -10,7 +16,6 @@ function TodoList({ onSelectTodo }: TodoListProps) {
   const [todoFromDB, setTodoFromDB] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [editTodo, setEditTodo] = useState<Todo | null>(null);
-  const [isImportant, setIsImportant] = useState(false);
 
   const handleNewTodo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTodoContent = e.target.value;
@@ -37,7 +42,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
         title: newTodo,
         dueDate: undefined,
         isComplete: false,
-        todoDetail: { description: '' },
+        todoDetail: { description: '', importance: false },
       };
       addTodo(newTodoItem);
       setNewTodo('');
@@ -84,8 +89,9 @@ function TodoList({ onSelectTodo }: TodoListProps) {
     }
   };
 
-  const handleImportant = () => {
-    setIsImportant(!isImportant);
+  const handleImportance = (id: string) => {
+    const selectedTodo = todoFromDB.find(todo => todo.id === id);
+    updateImportance(id, !selectedTodo?.todoDetail.importance);
   };
 
   useEffect(() => {
@@ -124,12 +130,12 @@ function TodoList({ onSelectTodo }: TodoListProps) {
                 </button>
               )}
 
-              {!isImportant ? (
+              {!todo.todoDetail.importance ? (
                 <div className="flex items-center gap-2 h-transparent">
                   <button
                     type="button"
                     className="border-none outline-none bg-transparent text-center"
-                    onClick={handleImportant}
+                    onClick={() => handleImportance(todo.id)}
                   >
                     ☆
                   </button>
@@ -139,7 +145,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
                   <button
                     type="button"
                     className="border-none outline-none bg-transparent text-center"
-                    onClick={handleImportant}
+                    onClick={() => handleImportance(todo.id)}
                   >
                     ★
                   </button>
