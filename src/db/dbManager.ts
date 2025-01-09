@@ -103,17 +103,3 @@ export const deleteTodo = (id: string): Promise<void> => {
     store.delete(id);
   });
 };
-
-export const updateImportance = (
-  id: string,
-  importance: boolean,
-): Promise<void> => {
-  return withIndexedDB<void>(DB.STORE_NAME, 'readwrite', store => {
-    const request = store.get(id);
-    request.onsuccess = () => {
-      const todo = request.result;
-      todo.todoDetail.importance = importance;
-      store.put(todo);
-    };
-  });
-};
