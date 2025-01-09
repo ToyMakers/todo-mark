@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  addTodo,
-  getAllTodos,
-  deleteTodo,
-  updateTodo,
-  updateImportance,
-} from '../db/dbManager';
+import { addTodo, getAllTodos, deleteTodo, updateTodo } from '../db/dbManager';
 
 interface TodoListProps {
   onSelectTodo: (id: string, view: string) => void;
@@ -91,7 +85,15 @@ function TodoList({ onSelectTodo }: TodoListProps) {
 
   const handleImportance = (id: string) => {
     const selectedTodo = todoFromDB.find(todo => todo.id === id);
-    updateImportance(id, !selectedTodo?.todoDetail.importance);
+    if (selectedTodo) {
+      updateTodo({
+        ...selectedTodo,
+        todoDetail: {
+          ...selectedTodo.todoDetail,
+          importance: !selectedTodo.todoDetail.importance,
+        },
+      });
+    }
   };
 
   useEffect(() => {
@@ -134,7 +136,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
                 <div className="flex items-center gap-2 h-transparent">
                   <button
                     type="button"
-                    aria-label="important"
+                    aria-label="importance"
                     className="border-none outline-none bg-transparent text-center"
                     onClick={() => handleImportance(todo.id)}
                   >
@@ -147,7 +149,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
                 <div className="flex items-center gap-2 h-transparent">
                   <button
                     type="button"
-                    aria-label="important"
+                    aria-label="importance"
                     className="border-none outline-none bg-transparent text-center"
                     onClick={() => handleImportance(todo.id)}
                   >
