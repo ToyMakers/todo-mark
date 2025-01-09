@@ -22,25 +22,11 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     const { name, value, checked } = e.target;
 
     if (selectedTodo) {
-      setSelectedTodo(prevTodo => {
-        if (!prevTodo) return prevTodo;
-        switch (name) {
-          case 'isComplete':
-            return {
-              ...prevTodo,
-              isComplete: checked,
-            };
-          case 'dueDate':
-            return {
-              ...prevTodo,
-              dueDate: new Date(value),
-            };
-          default:
-            return {
-              ...prevTodo,
-              [name]: value,
-            };
-        }
+      setSelectedTodo({
+        ...selectedTodo,
+        [name]: value,
+        [name]: name === 'isComplete' ? checked : value,
+        [name]: name === 'dueDate' ? new Date(value) : value,
       });
       updateTodo({
         ...selectedTodo,
@@ -53,15 +39,12 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     const { name, value } = e.target;
 
     if (selectedTodo) {
-      setSelectedTodo(prevTodo => {
-        if (!prevTodo) return prevTodo;
-        return {
-          ...prevTodo,
-          todoDetail: {
-            ...prevTodo.todoDetail,
-            [name]: value,
-          },
-        };
+      setSelectedTodo({
+        ...selectedTodo,
+        todoDetail: {
+          ...selectedTodo.todoDetail,
+          [name]: value,
+        },
       });
       updateTodo({
         ...selectedTodo,
@@ -77,15 +60,9 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     if (selectedTodo) {
       const newImportance = !selectedTodo.todoDetail.importance;
 
-      setSelectedTodo(prevTodo => {
-        if (!prevTodo) return prevTodo;
-        return {
-          ...prevTodo,
-          todoDetail: {
-            ...prevTodo.todoDetail,
-            importance: newImportance,
-          },
-        };
+      setSelectedTodo({
+        ...selectedTodo,
+        todoDetail: { ...selectedTodo.todoDetail, importance: newImportance },
       });
 
       updateTodo({
