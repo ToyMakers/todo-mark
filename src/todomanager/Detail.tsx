@@ -96,33 +96,24 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
           {!isModify ? (
             <div className="flex justify-around items-center space-x-2 w-full">
               <div className="text-lg">{selectedTodo?.title}</div>
-              {!selectedTodo?.todoDetail.importance ? (
-                <div className="flex items-center gap-2 h-transparent">
-                  <button
-                    type="button"
-                    aria-label="importance"
-                    className="border-none outline-none bg-transparent text-center"
-                    onClick={() => handleImportance()}
-                  >
+              <div className="flex items-center gap-2 h-transparent">
+                <button
+                  type="button"
+                  aria-label="importance"
+                  className="border-none outline-none bg-transparent text-center"
+                  onClick={() => handleImportance()}
+                >
+                  {!selectedTodo?.todoDetail.importance ? (
                     <div className="relative w-6 h-8 bg-gray-300 text-white rounded-md shadow-md">
                       <div className="absolute -bottom-2 left-0 right-0 mx-auto w-0 h-0 border-t-[12px] border-t-gray-300 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent" />
                     </div>
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 h-transparent">
-                  <button
-                    type="button"
-                    aria-label="importance"
-                    className="border-none outline-none bg-transparent text-center"
-                    onClick={() => handleImportance()}
-                  >
+                  ) : (
                     <div className="relative w-6 h-8 bg-orange-500 text-white rounded-md shadow-md">
                       <div className="absolute -bottom-2 left-0 right-0 mx-auto w-0 h-0 border-t-[12px] border-t-orange-500 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent" />
                     </div>
-                  </button>
-                </div>
-              )}
+                  )}
+                </button>
+              </div>
 
               <div className="text-sm text-gray-600">
                 {selectedTodo?.dueDate && (
@@ -147,33 +138,24 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
                   onChange={handleInputChange}
                   className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-40"
                 />
-                {!selectedTodo?.todoDetail.importance ? (
-                  <div className="flex items-center gap-2 h-transparent">
-                    <button
-                      type="button"
-                      aria-label="importance"
-                      className="border-none outline-none bg-transparent text-center"
-                      onClick={() => handleImportance()}
-                    >
+                <div className="flex items-center gap-2 h-transparent">
+                  <button
+                    type="button"
+                    aria-label="importance"
+                    className="border-none outline-none bg-transparent text-center"
+                    onClick={() => handleImportance()}
+                  >
+                    {!selectedTodo?.todoDetail.importance ? (
                       <div className="relative w-6 h-8 bg-gray-300 text-white rounded-md shadow-md">
                         <div className="absolute -bottom-2 left-0 right-0 mx-auto w-0 h-0 border-t-[12px] border-t-gray-300 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent" />
                       </div>
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2 h-transparent">
-                    <button
-                      type="button"
-                      aria-label="importance"
-                      className="border-none outline-none bg-transparent text-center"
-                      onClick={() => handleImportance()}
-                    >
+                    ) : (
                       <div className="relative w-6 h-8 bg-orange-500 text-white rounded-md shadow-md">
                         <div className="absolute -bottom-2 left-0 right-0 mx-auto w-0 h-0 border-t-[12px] border-t-orange-500 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent" />
                       </div>
-                    </button>
-                  </div>
-                )}
+                    )}
+                  </button>
+                </div>
                 <input
                   type="checkbox"
                   name="isComplete"
