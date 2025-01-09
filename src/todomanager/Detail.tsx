@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactMarkDown from 'react-markdown';
 import 'github-markdown-css/github-markdown-light.css';
 import remarkGfm from 'remark-gfm';
-import { getTodobyId, updateTodo, updateImportance } from '../db/dbManager';
+import { getTodobyId, updateTodo } from '../db/dbManager';
 import calculateDday from '../utils/utils';
 
 function Detail({ id, onBack }: { id: string; onBack: () => void }) {
@@ -73,9 +73,29 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     }
   };
 
-  const handleImportance = async () => {
-    const todo = await getTodobyId(id);
-    updateImportance(id, !todo?.todoDetail.importance);
+  const handleImportance = () => {
+    if (selectedTodo) {
+      const newImportance = !selectedTodo.todoDetail.importance;
+
+      setSelectedTodo(prevTodo => {
+        if (!prevTodo) return prevTodo;
+        return {
+          ...prevTodo,
+          todoDetail: {
+            ...prevTodo.todoDetail,
+            importance: newImportance,
+          },
+        };
+      });
+
+      updateTodo({
+        ...selectedTodo,
+        todoDetail: {
+          ...selectedTodo.todoDetail,
+          importance: newImportance,
+        },
+      });
+    }
   };
 
   useEffect(() => {
