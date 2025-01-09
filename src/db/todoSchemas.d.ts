@@ -8,4 +8,5 @@ interface Todo {
 
 interface TodoDetail {
   description: string;
+  importance: boolean;
 }

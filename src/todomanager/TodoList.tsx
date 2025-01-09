@@ -36,7 +36,7 @@ function TodoList({ onSelectTodo }: TodoListProps) {
         title: newTodo,
         dueDate: undefined,
         isComplete: false,
-        todoDetail: { description: '' },
+        todoDetail: { description: '', importance: false },
       };
       addTodo(newTodoItem);
       setNewTodo('');
@@ -83,6 +83,19 @@ function TodoList({ onSelectTodo }: TodoListProps) {
     }
   };
 
+  const handleImportance = (id: string) => {
+    const selectedTodo = todoFromDB.find(todo => todo.id === id);
+    if (selectedTodo) {
+      updateTodo({
+        ...selectedTodo,
+        todoDetail: {
+          ...selectedTodo.todoDetail,
+          importance: !selectedTodo.todoDetail.importance,
+        },
+      });
+    }
+  };
+
   useEffect(() => {
     getTodosFromDB();
   }, [todoFromDB]);
@@ -119,6 +132,24 @@ function TodoList({ onSelectTodo }: TodoListProps) {
                 </button>
               )}
 
+              <div className="flex items-center gap-2 h-transparent">
+                <button
+                  type="button"
+                  aria-label="importance"
+                  className="border-none outline-none bg-transparent text-center"
+                  onClick={() => handleImportance(todo.id)}
+                >
+                  {!todo.todoDetail.importance ? (
+                    <div className="relative w-6 h-8 bg-gray-300 text-white rounded-md shadow-md">
+                      <div className="absolute -bottom-2 left-0 right-0 mx-auto w-0 h-0 border-t-[12px] border-t-gray-300 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent" />
+                    </div>
+                  ) : (
+                    <div className="relative w-6 h-8 bg-orange-500 text-white rounded-md shadow-md">
+                      <div className="absolute -bottom-2 left-0 right-0 mx-auto w-0 h-0 border-t-[12px] border-t-orange-500 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent" />
+                    </div>
+                  )}
+                </button>
+              </div>
               <div className="flex items-center gap-2">
                 {editTodo?.id === todo.id ? (
                   <button

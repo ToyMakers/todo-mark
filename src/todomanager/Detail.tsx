@@ -22,25 +22,11 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     const { name, value, checked } = e.target;
 
     if (selectedTodo) {
-      setSelectedTodo(prevTodo => {
-        if (!prevTodo) return prevTodo;
-        switch (name) {
-          case 'isComplete':
-            return {
-              ...prevTodo,
-              isComplete: checked,
-            };
-          case 'dueDate':
-            return {
-              ...prevTodo,
-              dueDate: new Date(value),
-            };
-          default:
-            return {
-              ...prevTodo,
-              [name]: value,
-            };
-        }
+      setSelectedTodo({
+        ...selectedTodo,
+        [name]: value,
+        [name]: name === 'isComplete' ? checked : value,
+        [name]: name === 'dueDate' ? new Date(value) : value,
       });
       updateTodo({
         ...selectedTodo,
@@ -53,21 +39,37 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
     const { name, value } = e.target;
 
     if (selectedTodo) {
-      setSelectedTodo(prevTodo => {
-        if (!prevTodo) return prevTodo;
-        return {
-          ...prevTodo,
-          todoDetail: {
-            ...prevTodo.todoDetail,
-            [name]: value,
-          },
-        };
+      setSelectedTodo({
+        ...selectedTodo,
+        todoDetail: {
+          ...selectedTodo.todoDetail,
+          [name]: value,
+        },
       });
       updateTodo({
         ...selectedTodo,
         todoDetail: {
           ...selectedTodo.todoDetail,
           [name]: value,
+        },
+      });
+    }
+  };
+
+  const handleImportance = () => {
+    if (selectedTodo) {
+      const newImportance = !selectedTodo.todoDetail.importance;
+
+      setSelectedTodo({
+        ...selectedTodo,
+        todoDetail: { ...selectedTodo.todoDetail, importance: newImportance },
+      });
+
+      updateTodo({
+        ...selectedTodo,
+        todoDetail: {
+          ...selectedTodo.todoDetail,
+          importance: newImportance,
         },
       });
     }
@@ -91,6 +93,25 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
           {!isModify ? (
             <div className="flex justify-around items-center space-x-2 w-full">
               <div className="text-lg">{selectedTodo?.title}</div>
+              <div className="flex items-center gap-2 h-transparent">
+                <button
+                  type="button"
+                  aria-label="importance"
+                  className="border-none outline-none bg-transparent text-center"
+                  onClick={() => handleImportance()}
+                >
+                  {!selectedTodo?.todoDetail.importance ? (
+                    <div className="relative w-6 h-8 bg-gray-300 text-white rounded-md shadow-md">
+                      <div className="absolute -bottom-2 left-0 right-0 mx-auto w-0 h-0 border-t-[12px] border-t-gray-300 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent" />
+                    </div>
+                  ) : (
+                    <div className="relative w-6 h-8 bg-orange-500 text-white rounded-md shadow-md">
+                      <div className="absolute -bottom-2 left-0 right-0 mx-auto w-0 h-0 border-t-[12px] border-t-orange-500 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent" />
+                    </div>
+                  )}
+                </button>
+              </div>
+
               <div className="text-sm text-gray-600">
                 {selectedTodo?.dueDate && (
                   <div>{calculateDday(selectedTodo?.dueDate)}</div>
@@ -114,6 +135,24 @@ function Detail({ id, onBack }: { id: string; onBack: () => void }) {
                   onChange={handleInputChange}
                   className="border border-gray-300 focus:ring-2 focus:ring-brown-400 focus:outline-none rounded p-2 text-sm w-40"
                 />
+                <div className="flex items-center gap-2 h-transparent">
+                  <button
+                    type="button"
+                    aria-label="importance"
+                    className="border-none outline-none bg-transparent text-center"
+                    onClick={() => handleImportance()}
+                  >
+                    {!selectedTodo?.todoDetail.importance ? (
+                      <div className="relative w-6 h-8 bg-gray-300 text-white rounded-md shadow-md">
+                        <div className="absolute -bottom-2 left-0 right-0 mx-auto w-0 h-0 border-t-[12px] border-t-gray-300 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent" />
+                      </div>
+                    ) : (
+                      <div className="relative w-6 h-8 bg-orange-500 text-white rounded-md shadow-md">
+                        <div className="absolute -bottom-2 left-0 right-0 mx-auto w-0 h-0 border-t-[12px] border-t-orange-500 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent" />
+                      </div>
+                    )}
+                  </button>
+                </div>
                 <input
                   type="checkbox"
                   name="isComplete"
